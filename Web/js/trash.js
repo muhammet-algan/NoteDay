@@ -215,7 +215,6 @@ var Trash = (function () {
             finance: 'Finans',
             board_item: 'Görev',
             'new-table': 'Tablo',
-            aliskanlik: 'Alışkanlık',
             sub_section: 'Alt Bölüm',
             sidebar_section: 'Menü Bölümü',
             team: 'Ekip'
@@ -237,8 +236,6 @@ var Trash = (function () {
                 return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>';
             case 'new-table':
                 return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>';
-            case 'aliskanlik':
-                return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
             case 'sub_section':
                 return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3z" /><path d="M14 3v4a2 2 0 0 0 2 2h4" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="13" y2="17" /></svg>';
             case 'sidebar_section':
@@ -299,7 +296,6 @@ var Trash = (function () {
                     break;
                 case 'team':
                 case 'new-table':
-                case 'aliskanlik':
                 case 'sub_section':
                 case 'sidebar_section':
                     if (typeof App !== 'undefined' && App.restoreNavItem) {
@@ -426,7 +422,6 @@ var Trash = (function () {
             finance: 'Finanslarım',
             board_item: 'Panom',
             'new-table': 'Tablo',
-            aliskanlik: 'Alışkanlık',
             sub_section: 'Alt Bölüm',
             sidebar_section: 'Menü Bölümü',
             team: 'Ekip'
@@ -505,11 +500,6 @@ var Trash = (function () {
             } else if (item.type === 'team') {
                 detailsHtml += '<div class="finance-detail-body" style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">' +
                     '<p style="color: var(--color-text-secondary); font-size: 13px; line-height: 1.5; margin: 0;">Bu bir ekip sayfasıdır. Geri yüklediğinizde ekibiniz tüm not verileriyle birlikte kenar çubuğuna eklenecektir.</p>' +
-                    sectionRowHtml +
-                '</div>';
-            } else if (item.type === 'aliskanlik') {
-                detailsHtml += '<div class="finance-detail-body" style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">' +
-                    '<p style="color: var(--color-text-secondary); font-size: 13px; line-height: 1.5; margin: 0;">Bu bir alışkanlık takip sayfasıdır. Geri yüklediğinizde alışkanlığınız tüm verileriyle birlikte kenar çubuğuna eklenecektir.</p>' +
                     sectionRowHtml +
                 '</div>';
             } else if (item.type === 'sub_section') {

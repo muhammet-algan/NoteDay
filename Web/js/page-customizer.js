@@ -37,7 +37,6 @@ var PageCustomizer = (function () {
             var isBoard = activeSection && activeSection.id === 'board-section';
             var isTable = activeSection && activeSection.id === 'new-table-section';
             var isTeam = currentView.indexOf('team_instance_') === 0;
-            var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
             var prefix = 'notion_';
             if (isFinance) prefix = 'finance_';
@@ -46,13 +45,12 @@ var PageCustomizer = (function () {
             else if (isBoard) prefix = 'board_';
             else if (isTable) prefix = 'table_';
             else if (isTeam) prefix = 'team_';
-            else if (isHabits) prefix = 'habits_';
 
             var savedLayout = localStorage.getItem(prefix + 'cust_layout');
             if (savedLayout) {
                 _layout = savedLayout;
             } else {
-                _layout = (isNotes || isFinance || isReminders || isBoard || isTable || isTeam || isHabits) ? 'simple' : (activeSection && activeSection.id === 'diary-section' ? 'split' : 'simple');
+                _layout = (isNotes || isFinance || isReminders || isBoard || isTable || isTeam) ? 'simple' : (activeSection && activeSection.id === 'diary-section' ? 'split' : 'simple');
             }
 
             var savedOptions = localStorage.getItem(prefix + 'cust_options');
@@ -112,7 +110,6 @@ var PageCustomizer = (function () {
             var isBoard = activeSection && activeSection.id === 'board-section';
             var isTable = activeSection && activeSection.id === 'new-table-section';
             var isTeam = currentView.indexOf('team_instance_') === 0;
-            var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
             var prefix = 'notion_';
             if (isFinance) prefix = 'finance_';
@@ -121,7 +118,6 @@ var PageCustomizer = (function () {
             else if (isBoard) prefix = 'board_';
             else if (isTable) prefix = 'table_';
             else if (isTeam) prefix = 'team_';
-            else if (isHabits) prefix = 'habits_';
 
             localStorage.setItem(prefix + 'cust_layout', _layout);
             localStorage.setItem(prefix + 'cust_options', JSON.stringify(_options));
@@ -177,7 +173,6 @@ var PageCustomizer = (function () {
         var isBoard = activeSection && activeSection.id === 'board-section';
         var isTable = activeSection && activeSection.id === 'new-table-section';
         var isTeam = currentView.indexOf('team_instance_') === 0;
-        var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
         var labelOption = document.getElementById('notum-cust-comments-option-label');
         var rowComments = labelOption ? labelOption.closest('.notum-cust-option-row') : null;
@@ -185,7 +180,7 @@ var PageCustomizer = (function () {
             if ((isDiary || isNotes) && _layout === 'list') {
                 rowComments.style.display = 'none';
             } else {
-                var hideComments = isFinance || isReminders || isBoard || isTable || isTeam || isHabits;
+                var hideComments = isFinance || isReminders || isBoard || isTable || isTeam;
                 rowComments.style.display = hideComments ? 'none' : 'flex';
             }
         }
@@ -214,7 +209,6 @@ var PageCustomizer = (function () {
             var isBoard = activeSection && activeSection.id === 'board-section';
             var isTable = activeSection && activeSection.id === 'new-table-section';
             var isTeam = currentView.indexOf('team_instance_') === 0;
-            var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
             var titleEl = document.getElementById('notum-cust-header-subtitle');
             var subtitleWrapper = document.getElementById('notum-cust-header-subtitle-wrapper');
@@ -232,7 +226,7 @@ var PageCustomizer = (function () {
             // Load saved state
             loadState();
 
-            if (isDiary || isNotes || isFinance || isReminders || isBoard || isTable || isTeam || isHabits) {
+            if (isDiary || isNotes || isFinance || isReminders || isBoard || isTable || isTeam) {
                 var prefix = 'notion_';
                 if (isFinance) prefix = 'finance_';
                 else if (isNotes) prefix = 'notes_';
@@ -240,10 +234,9 @@ var PageCustomizer = (function () {
                 else if (isBoard) prefix = 'board_';
                 else if (isTable) prefix = 'table_';
                 else if (isTeam) prefix = 'team_';
-                else if (isHabits) prefix = 'habits_';
 
                 if (!localStorage.getItem(prefix + 'cust_layout')) {
-                    _layout = (isNotes || isFinance || isReminders || isBoard || isTable || isTeam || isHabits) ? 'simple' : 'split';
+                    _layout = (isNotes || isFinance || isReminders || isBoard || isTable || isTeam) ? 'simple' : 'split';
                 }
                 
                 if (titleEl) {
@@ -253,14 +246,13 @@ var PageCustomizer = (function () {
                     else if (isBoard) titleEl.textContent = 'Önizleme: Panom';
                     else if (isTable) titleEl.textContent = 'Önizleme: Tablo';
                     else if (isTeam) titleEl.textContent = 'Önizleme: Ekipler';
-                    else if (isHabits) titleEl.textContent = 'Önizleme: Alışkanlıklar';
                     else titleEl.textContent = 'Önizleme: Günlüklerim';
                 }
                 if (subtitleWrapper) subtitleWrapper.style.display = 'none';
                 if (paneNormal) paneNormal.style.display = 'none';
                 if (paneDiary) paneDiary.style.display = 'block';
 
-                var hideComments = isFinance || isReminders || isBoard || isTable || isTeam || isHabits;
+                var hideComments = isFinance || isReminders || isBoard || isTable || isTeam;
                 var rowComments = document.getElementById('notum-cust-comments-option-label') ? document.getElementById('notum-cust-comments-option-label').closest('.notum-cust-option-row') : null;
                 if (rowComments) {
                     rowComments.style.display = hideComments ? 'none' : 'flex';
@@ -281,7 +273,7 @@ var PageCustomizer = (function () {
                 var nameList = document.getElementById('notum-cust-layout-list-name');
                 if (nameList) nameList.textContent = 'Liste';
 
-                var hideCalendarOpts = isFinance || isReminders || isBoard || isTable || isTeam || isHabits;
+                var hideCalendarOpts = isFinance || isReminders || isBoard || isTable || isTeam;
                 var rowCalendar = document.getElementById('notum-cust-option-row-calendar');
                 var rowSpecialDays = document.getElementById('notum-cust-option-row-specialDays');
                 var rowShowDate = document.getElementById('notum-cust-option-row-showDate');
@@ -405,9 +397,8 @@ var PageCustomizer = (function () {
         var isBoard = activeSection && activeSection.id === 'board-section';
         var isTable = activeSection && activeSection.id === 'new-table-section';
         var isTeam = currentView.indexOf('team_instance_') === 0;
-        var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
-        if (isFinance || isReminders || isBoard || isTable || isTeam || isHabits) {
+        if (isFinance || isReminders || isBoard || isTable || isTeam) {
             type = 'simple';
         }
 
@@ -629,9 +620,8 @@ var PageCustomizer = (function () {
         var isBoard = activeSection && activeSection.id === 'board-section';
         var isTable = activeSection && activeSection.id === 'new-table-section';
         var isTeam = currentView.indexOf('team_instance_') === 0;
-        var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
-        if (isDiary || isNotes || isFinance || isReminders || isBoard || isTable || isTeam || isHabits) {
+        if (isDiary || isNotes || isFinance || isReminders || isBoard || isTable || isTeam) {
             var paneDiary = document.getElementById('notum-cust-diary-preview');
             if (paneDiary) {
                 paneDiary.classList.remove('layout-split', 'layout-simple', 'layout-list');
@@ -665,8 +655,6 @@ var PageCustomizer = (function () {
                 renderTablePreview();
             } else if (isTeam) {
                 renderTeamPreview();
-            } else if (isHabits) {
-                renderHabitsPreview();
             } else {
                 renderDiaryPreview();
             }
@@ -1565,40 +1553,6 @@ var PageCustomizer = (function () {
         container.innerHTML = html;
     }
 
-    function renderHabitsPreview() {
-        var container = document.getElementById('notum-cust-diary-preview');
-        if (!container) return;
-
-        var habits = [
-            { title: "Kitap Okuma", streak: "5 Gün", progress: [true, true, true, false, true, true, true] },
-            { title: "Spor Yapma", streak: "3 Gün", progress: [false, true, true, true, false, false, true] },
-            { title: "Yabancı Dil Çalışma", streak: "12 Gün", progress: [true, true, true, true, true, true, true] }
-        ];
-
-        var html = '<div class="notum-cust-diary-layout" style="width: 100%;">';
-        html += '<div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">';
-
-        habits.forEach(function (h) {
-            html += '<div style="padding: 14px; background: var(--color-bg-elevated, #ffffff); border: 1px solid var(--color-border, #e2e8f0); border-radius: 10px; display: flex; flex-direction: column; gap: 10px;">' +
-                    '  <div style="display: flex; justify-content: space-between; align-items: center;">' +
-                    '    <span style="font-size: 13px; font-weight: 600; color: var(--color-text);">' + escapeHtml(h.title) + '</span>' +
-                    '    <span style="font-size: 11px; font-weight: 500; color:#10b981; background:#ecfdf5; padding:2px 8px; border-radius:12px;">Seri: ' + h.streak + '</span>' +
-                    '  </div>' +
-                    '  <div style="display: flex; gap: 6px;">';
-
-            h.progress.forEach(function (active) {
-                var bg = active ? '#3b82f6' : 'rgba(59, 130, 246, 0.15)';
-                html += '    <div style="flex: 1; height: 16px; border-radius: 4px; background-color: ' + bg + ';"></div>';
-            });
-
-            html += '  </div>' +
-                    '</div>';
-        });
-
-        html += '</div></div>';
-        container.innerHTML = html;
-    }
-
     function prevPreviewMonth(e) {
         if (e) e.stopPropagation();
         _previewCalendarDate.setMonth(_previewCalendarDate.getMonth() - 1);
@@ -1609,7 +1563,6 @@ var PageCustomizer = (function () {
         var isBoard = activeSection && activeSection.id === 'board-section';
         var isTable = activeSection && activeSection.id === 'new-table-section';
         var isTeam = currentView.indexOf('team_instance_') === 0;
-        var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
         if (isFinance) {
             renderFinancePreview();
@@ -1621,8 +1574,6 @@ var PageCustomizer = (function () {
             renderTablePreview();
         } else if (isTeam) {
             renderTeamPreview();
-        } else if (isHabits) {
-            renderHabitsPreview();
         } else {
             renderDiaryPreview();
         }
@@ -1638,7 +1589,6 @@ var PageCustomizer = (function () {
         var isBoard = activeSection && activeSection.id === 'board-section';
         var isTable = activeSection && activeSection.id === 'new-table-section';
         var isTeam = currentView.indexOf('team_instance_') === 0;
-        var isHabits = activeSection && activeSection.id === 'aliskanlik-section';
 
         if (isFinance) {
             renderFinancePreview();
@@ -1650,8 +1600,6 @@ var PageCustomizer = (function () {
             renderTablePreview();
         } else if (isTeam) {
             renderTeamPreview();
-        } else if (isHabits) {
-            renderHabitsPreview();
         } else {
             renderDiaryPreview();
         }
@@ -1677,9 +1625,6 @@ var PageCustomizer = (function () {
         }
         if (typeof NewTable !== 'undefined' && NewTable.render) {
             NewTable.render();
-        }
-        if (typeof Aliskanlik !== 'undefined' && Aliskanlik.render) {
-            Aliskanlik.render();
         }
         
         applyAllSavedColors();
@@ -1715,9 +1660,6 @@ var PageCustomizer = (function () {
         }
         if (typeof NewTable !== 'undefined' && NewTable.render) {
             NewTable.render();
-        }
-        if (typeof Aliskanlik !== 'undefined' && Aliskanlik.render) {
-            Aliskanlik.render();
         }
         
         applyAllSavedColors();

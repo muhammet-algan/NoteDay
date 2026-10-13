@@ -1782,8 +1782,7 @@ input[type="date"].form-control {
 }
 
 .sidebar.collapsed #sidebar-nav-group-workspace,
-.sidebar.collapsed #sidebar-nav-group-tablolar,
-.sidebar.collapsed #sidebar-nav-group-aliskanliklar {
+.sidebar.collapsed #sidebar-nav-group-tablolar {
     margin-top: 8px;
     padding-top: 8px;
     border-top: 1px solid var(--color-border-subtle);
@@ -5528,8 +5527,7 @@ input[type="date"].form-control {
     }
 
     #sidebar-nav-group-workspace,
-    #sidebar-nav-group-tablolar,
-    #sidebar-nav-group-aliskanliklar {
+    #sidebar-nav-group-tablolar {
         margin-top: 0;
         padding-top: 0;
     }

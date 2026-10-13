@@ -516,35 +516,6 @@
                             </span>
                         </div>
                     </div>
-
-                    <!-- ALT GRUP: Alışkanlıklar bölümleri -->
-                    <div class="sidebar-nav-group" id="sidebar-nav-group-aliskanliklar" draggable="true">
-                        <div class="sidebar-nav-group-title" data-group="aliskanliklar" onclick="App.toggleGroupCollapse('aliskanliklar', event)">
-                            <span class="group-title-left">
-                                <span class="group-title-text">Alışkanlıklar</span>
-                                <span class="group-title-chevron">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                                </span>
-                            </span>
-                            <span class="group-title-actions">
-                                <span class="group-title-add-btn" onclick="App.showGroupAddDropdown('aliskanliklar', event)" title="İşlemler">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                                </span>
-                            </span>
-                        </div>
-                        <div class="sidebar-nav-item" data-view="aliskanlik" data-tooltip="Yeni Alışkanlık" data-default-label="Yeni Alışkanlık" draggable="true">
-                            <div class="nav-icon-container">
-                                <span class="nav-icon-original">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                                </span>
-                            </div>
-                            <span class="nav-label">Yeni Alışkanlık</span>
-                            <span class="sidebar-nav-badge" id="badge-aliskanlik"></span>
-                            <span class="sidebar-nav-more-btn" onclick="App.showNavContextMenu('aliskanlik', event)">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-                            </span>
-                        </div>
-                    </div>
                 </nav>
 
                 <div id="sidebar-context-menu" class="sidebar-context-menu">
@@ -2089,82 +2060,6 @@
                             </div>
                         </div>
                     </section>
-
-                    <!-- 🏆 YENİ ALIŞKANLIK BÖLÜMÜ -->
-                    <section id="aliskanlik-section" class="section-panel" style="display: none;">
-                        <div class="aliskanlik-container" style="max-width: 100%; padding: 24px; padding-bottom: 80px; box-sizing: border-box;">
-                            <div class="notum-editor-title-container" style="margin-bottom: 24px;">
-                                <input type="text" id="aliskanlik-title-input" class="notum-editor-title-input" placeholder="Yeni Alışkanlık">
-                            </div>
-                            
-                            <!-- Özellikler (Properties) -->
-                            <div class="notum-editor-properties" id="aliskanlik-properties" style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px;">
-                                <div class="notum-property-row" data-property-type="date">
-                                    <span class="notum-property-label" style="display: flex; align-items: center; gap: 6px; width: 220px; color: var(--color-text-secondary); font-size: 13px;">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                        <span>Başlangıç Tarihi</span>
-                                    </span>
-                                    <span class="notum-property-value" id="aliskanlik-property-date" style="color: var(--color-text); font-size: 13px; font-weight: 500;"></span>
-                                </div>
-                                <div class="notum-property-row removable" data-property-type="color" data-id="color">
-                                    <span class="notum-property-label clickable-menu" onclick="PropertyMenu.show(event, this, 'color', 'aliskanlik')" style="display: flex; align-items: center; gap: 6px; width: 220px; color: var(--color-text-secondary); font-size: 13px; cursor: pointer;">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"></path><circle cx="7.5" cy="10.5" r="1"></circle><circle cx="11.5" cy="7.5" r="1"></circle><circle cx="16.5" cy="9.5" r="1"></circle></svg>
-                                        <span>Renk Seçimi</span>
-                                    </span>
-                                    <span class="notum-property-value clickable" onclick="Aliskanlik.toggleColorDropdown(event, this)" style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500;">
-                                        <span style="display: inline-block; width: 14px; height: 10px; border-radius: 3px; background-color: #3b82f6;"></span>
-                                        <span>Mavi</span>
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <!-- + Özellik ekle -->
-                            <div class="notum-property-add-row" style="margin-bottom: 24px; position: relative; z-index: 100;">
-                                <span class="notum-property-add-btn" onclick="Aliskanlik.togglePropertyDropdown(event)">
-                                    <span>+ Özellik ekle</span>
-                                </span>
-                                <div class="notum-property-add-dropdown" id="aliskanlik-property-dropdown">
-
-                                    <div class="notum-property-add-dropdown-item" onclick="Aliskanlik.addProperty('color')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"></path><circle cx="7.5" cy="10.5" r="1"></circle><circle cx="11.5" cy="7.5" r="1"></circle><circle cx="16.5" cy="9.5" r="1"></circle></svg>
-                                        <span class="dropdown-item-label">Renk Seçimi</span>
-                                    </div>
-                                    <div class="notum-property-add-dropdown-item" onclick="Aliskanlik.addProperty('tag')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-                                        <span class="dropdown-item-label">Etiket</span>
-                                    </div>
-                                    <div class="notum-property-add-dropdown-item" onclick="Aliskanlik.addProperty('status')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
-                                        <span class="dropdown-item-label">Durum</span>
-                                    </div>
-                                    <div class="notum-property-add-dropdown-item" onclick="Aliskanlik.addProperty('checkbox')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M9 12l2 2 4-4"></path></svg>
-                                        <span class="dropdown-item-label">Onay Kutusu</span>
-                                    </div>
-                                    <div class="notum-property-add-dropdown-item" onclick="Aliskanlik.addProperty('location')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                        <span class="dropdown-item-label">Konum</span>
-                                    </div>
-                                    <div class="notum-property-add-dropdown-item" onclick="Aliskanlik.addProperty('comments')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                                        <span class="dropdown-item-label">Yorum</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Alışkanlık Yorumlar Bölümü -->
-                            <div id="aliskanlik-comments-section" style="margin-top: 8px; padding: 0 4px; margin-bottom: 16px;"></div>
-
-                            <hr class="notum-editor-divider">
-
-                            <!-- GitHub Benzeri Alışkanlık Takip Matrisi -->
-                            <div class="aliskanlik-grid-wrapper" style="margin-top: 24px; padding: 20px; background: var(--color-bg-elevated, #ffffff); border: 1px solid var(--color-border, #e2e8f0); border-radius: 12px; display: block; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.02); box-sizing: border-box;">
-                                <div id="aliskanlik-grid-container" style="display: grid; grid-template-columns: auto repeat(52, minmax(13px, 1fr)); grid-template-rows: auto repeat(7, minmax(13px, 1fr)); gap: 4px; width: 100%; box-sizing: border-box; align-items: center; overflow-x: auto;">
-                                    <!-- Dinamik olarak 7 satır x 52 sütun grid oluşturulacak -->
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                 </div>
             </main>
 
@@ -3262,7 +3157,6 @@
     <script src="js/search.js?v=99"></script>
     <script src="js/property-menu.js?v=102"></script>
     <script src="js/new-table.js?v=99"></script>
-    <script src="js/aliskanlik.js?v=99"></script>
     <script src="js/teamCustomizer.js"></script>
     <script src="js/app.js?v=105"></script>
     <script src="js/selection-menu.js?v=99"></script>

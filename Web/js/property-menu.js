@@ -9,7 +9,7 @@ var PropertyMenu = (function () {
 
     var activeElement = null; // Tıklanan label span elementi
     var activePropertyType = null; // 'location', 'tag', 'status', 'checkbox'
-    var activeSectionType = null; // 'notes', 'aliskanlik'
+    var activeSectionType = null; // 'notes'
 
     function init() {
         var menu = document.getElementById('notum-property-action-menu');
@@ -188,10 +188,6 @@ var PropertyMenu = (function () {
             if (typeof Notes !== 'undefined' && Notes.addProperty) {
                 Notes.addProperty(activePropertyType);
             }
-        } else if (activeSectionType === 'aliskanlik') {
-            if (typeof Aliskanlik !== 'undefined' && Aliskanlik.addProperty) {
-                Aliskanlik.addProperty(activePropertyType, activeElement);
-            }
         }
         closeMenu();
     }
@@ -262,8 +258,6 @@ var PropertyMenu = (function () {
         var secType = sectionType || activeSectionType;
         if (secType === 'notes') {
             if (typeof Notes !== 'undefined' && Notes.autoSaveNote) Notes.autoSaveNote();
-        } else if (secType === 'aliskanlik') {
-            if (typeof Aliskanlik !== 'undefined' && Aliskanlik.saveProperties) Aliskanlik.saveProperties();
         }
     }
 

@@ -18,8 +18,7 @@ var App = (function () {
         board: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-primary);"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>',
         trash: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-primary);"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>',
         messages: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-primary);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>',
-        'new-table': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-primary);"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
-        aliskanlik: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-primary);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'
+        'new-table': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-primary);"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>'
     };
 
     /* Uygulama başlatma - Tüm modülleri yükler ve gezinmeyi ayarlar */
@@ -71,7 +70,7 @@ var App = (function () {
             /* Alt bölümleri yükle ve DOM'a ekle */
             loadSubSections();
 
-            /* Kaydedilmiş grup öğelerini yükle (Tablolar, Alışkanlıklar) */
+            /* Kaydedilmiş grup öğelerini yükle (Tablolar) */
             loadGroupItems();
             loadGroupTitles();
 
@@ -346,8 +345,7 @@ var App = (function () {
                 finance: 'Finanslarım',
                 board: 'Panom',
                 trash: 'Çöp Kutusu',
-                'new-table': 'Yeni Tablo',
-                aliskanlik: 'Yeni Alışkanlık'
+                'new-table': 'Yeni Tablo'
             };
 
             var headerEl = document.getElementById('content-header-title');
@@ -413,8 +411,7 @@ var App = (function () {
                 notes: { action: 'Notes.openModal()' },
                 finance: { action: 'Finance.openAddModal()' },
                 board: { action: 'Board.openNewListDropdown()' },
-                'new-table': { action: "Tablo.addNotionRow(document.querySelector('.section-panel.active .notum-db-wrapper'))" },
-                aliskanlik: { action: "App.handleGroupAdd('aliskanliklar')" }
+                'new-table': { action: "Tablo.addNotionRow(document.querySelector('.section-panel.active .notum-db-wrapper'))" }
             };
             if (actionBtn) {
                 var actionKey = parentViewName;
@@ -422,8 +419,6 @@ var App = (function () {
                     actionKey = 'notes';
                 } else if (parentViewName.indexOf('new-table_instance_') === 0) {
                     actionKey = 'new-table';
-                } else if (parentViewName.indexOf('aliskanlik_instance_') === 0) {
-                    actionKey = 'aliskanlik';
                 }
                 var cfg = sectionActions[actionKey];
                 if (cfg) {
@@ -529,11 +524,6 @@ var App = (function () {
                     NewTable.render();
                 }
                 break;
-            case 'aliskanlik':
-                if (typeof Aliskanlik !== 'undefined') {
-                    Aliskanlik.render();
-                }
-                break;
             case 'reminders':
                 Reminders.render();          // Hatırlatıcı listesini göster
                 ReminderCalendar.render();   // Hatırlatıcı takvimini çiz
@@ -579,8 +569,6 @@ var App = (function () {
                     var baseViewType = navItemR ? navItemR.getAttribute('data-view-type') : sectionName.split('_instance_')[0];
                     if (baseViewType === 'new-table' && typeof NewTable !== 'undefined') {
                         NewTable.render();
-                    } else if (baseViewType === 'aliskanlik' && typeof Aliskanlik !== 'undefined') {
-                        Aliskanlik.render();
                     } else if ((baseViewType === 'notes' || baseViewType === 'team') && typeof Notes !== 'undefined') {
                         Notes.render();
                     }
@@ -1070,12 +1058,6 @@ var App = (function () {
         if (viewName === 'new-table') {
             return 'Tablo';
         }
-        if (viewName && viewName.indexOf('aliskanlik_instance_') === 0) {
-            return 'Alışkanlık';
-        }
-        if (viewName === 'aliskanlik') {
-            return 'Alışkanlık';
-        }
         var navItem = document.querySelector('.sidebar-nav-item[data-view="' + viewName + '"]');
         var label = navItem ? navItem.querySelector('.nav-label').textContent.trim() : '';
         
@@ -1172,7 +1154,6 @@ var App = (function () {
                 var groupKey = null;
                 if (groupId === 'sidebar-nav-group-workspace') groupKey = 'workspace';
                 else if (groupId === 'sidebar-nav-group-tablolar') groupKey = 'tablolar';
-                else if (groupId === 'sidebar-nav-group-aliskanliklar') groupKey = 'aliskanliklar';
                 if (groupKey) {
                     saveGroupItems(groupKey);
                 }
@@ -1314,7 +1295,7 @@ var App = (function () {
             var type = 'item';
             if (viewName.indexOf('_instance_') !== -1) {
                 type = viewName.split('_instance_')[0];
-            } else if (viewName === 'new-table' || viewName === 'aliskanlik') {
+            } else if (viewName === 'new-table') {
                 type = viewName;
             } else if (viewName.indexOf('_sub_') !== -1) {
                 type = 'sub_section';
@@ -1336,12 +1317,6 @@ var App = (function () {
                     var email = user.email;
                     itemData.notes_data = localStorage.getItem('user_notes_' + viewName + '_' + email) || '';
                 }
-            } else if (type === 'aliskanlik') {
-                var keys = ['title', 'comments', 'creation_date', 'checked_days', 'properties', 'selected_color', 'updated_date'];
-                keys.forEach(function(k) {
-                    var val = DB.getForUser('aliskanlik_' + k + '_' + viewName);
-                    if (val) itemData[k] = val;
-                });
             } else if (type === 'sub_section') {
                 var parentId = viewName.split('_sub_')[0];
                 itemData.parentId = parentId;
@@ -1360,10 +1335,10 @@ var App = (function () {
         }
 
         // 2. Kenar çubuğundan kaldır veya gizle
-        if (viewName.indexOf('_instance_') !== -1 || viewName === 'new-table' || viewName === 'aliskanlik') {
+        if (viewName.indexOf('_instance_') !== -1 || viewName === 'new-table') {
             if (navItem) navItem.remove();
             
-            var groupKey = 'aliskanliklar';
+            var groupKey = 'tablolar';
             if (viewName.indexOf('new-table') !== -1 || viewName === 'new-table') {
                 groupKey = 'tablolar';
             } else if (viewName.indexOf('team_instance_') === 0) {
@@ -1382,11 +1357,6 @@ var App = (function () {
                 if (user) {
                     localStorage.removeItem('user_notes_' + viewName + '_' + user.email);
                 }
-            } else {
-                var keys = ['title', 'comments', 'creation_date', 'checked_days', 'properties', 'selected_color', 'updated_date'];
-                keys.forEach(function(k) {
-                    localStorage.removeItem(DB.userKey('aliskanlik_' + k + '_' + viewName));
-                });
             }
 
             var currentSection = localStorage.getItem('app_current_section');
@@ -1459,15 +1429,6 @@ var App = (function () {
                 showSection(viewName);
                 return;
             }
-        } else if (type === 'aliskanlik') {
-            if (data) {
-                var keys = ['title', 'comments', 'creation_date', 'checked_days', 'properties', 'selected_color', 'updated_date'];
-                keys.forEach(function(k) {
-                    if (data[k] !== undefined) {
-                        DB.setForUser('aliskanlik_' + k + '_' + viewName, data[k]);
-                    }
-                });
-            }
         } else if (type === 'sub_section') {
             // Restore sub-section configuration
             var parentId = data ? data.parentId : viewName.split('_sub_')[0];
@@ -1539,10 +1500,9 @@ var App = (function () {
         }
 
         // 2. Re-create the sidebar navigation item DOM for dynamic sections
-        var groupKey = (type === 'new-table') ? 'tablolar' : 'aliskanliklar';
+        var groupKey = 'tablolar';
         var groupMap = {
-            'tablolar': 'sidebar-nav-group-tablolar',
-            'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+            'tablolar': 'sidebar-nav-group-tablolar'
         };
         var groupId = groupMap[groupKey];
         if (!groupId) return;
@@ -1555,19 +1515,14 @@ var App = (function () {
             localStorage.setItem('sidebar_group_collapsed_' + groupKey, 'false');
         }
 
-        var iconHtml = '';
-        if (type === 'new-table') {
-            iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>';
-        } else if (type === 'aliskanlik') {
-            iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
-        }
+        var iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>';
 
         var div = document.createElement('div');
         div.className = 'sidebar-nav-item';
         div.setAttribute('data-view', viewName);
         div.setAttribute('data-view-type', type);
         div.setAttribute('data-tooltip', label);
-        div.setAttribute('data-default-label', type === 'new-table' ? 'Yeni Tablo' : 'Yeni Alışkanlık');
+        div.setAttribute('data-default-label', 'Yeni Tablo');
         div.setAttribute('draggable', 'true');
 
         div.innerHTML =
@@ -1843,8 +1798,7 @@ var App = (function () {
         var allowedGroups = [
             'sidebar-nav-group-main',
             'sidebar-nav-group-workspace',
-            'sidebar-nav-group-tablolar',
-            'sidebar-nav-group-aliskanliklar'
+            'sidebar-nav-group-tablolar'
         ];
 
         navItems.forEach(function (item) {
@@ -2061,7 +2015,7 @@ var App = (function () {
     function rebuildNavStateFromDOM() {
         try {
             var subSections = JSON.parse(localStorage.getItem('sidebar_sub_sections') || '[]');
-            var order = { main: [], workspace: [], tablolar: [], aliskanliklar: [] };
+            var order = { main: [], workspace: [], tablolar: [] };
             
             var subMap = {};
             subSections.forEach(function(sub) {
@@ -2071,8 +2025,7 @@ var App = (function () {
             var groups = [
                 { id: 'sidebar-nav-group-main', key: 'main' },
                 { id: 'sidebar-nav-group-workspace', key: 'workspace' },
-                { id: 'sidebar-nav-group-tablolar', key: 'tablolar' },
-                { id: 'sidebar-nav-group-aliskanliklar', key: 'aliskanliklar' }
+                { id: 'sidebar-nav-group-tablolar', key: 'tablolar' }
             ];
 
             groups.forEach(function(groupInfo) {
@@ -2169,11 +2122,10 @@ var App = (function () {
 
     /* Sıralamayı kaydet */
     function saveNavOrder() {
-        var order = { main: [], workspace: [], tablolar: [], aliskanliklar: [] };
+        var order = { main: [], workspace: [], tablolar: [] };
         var mainGroup = document.getElementById('sidebar-nav-group-main');
         var wsGroup = document.getElementById('sidebar-nav-group-workspace');
         var tabGroup = document.getElementById('sidebar-nav-group-tablolar');
-        var alGroup = document.getElementById('sidebar-nav-group-aliskanliklar');
 
         if (mainGroup) {
             mainGroup.querySelectorAll('.sidebar-nav-item:not(.sidebar-nav-sub-item)').forEach(function (item) {
@@ -2190,11 +2142,6 @@ var App = (function () {
                 order.tablolar.push(item.getAttribute('data-view'));
             });
         }
-        if (alGroup) {
-            alGroup.querySelectorAll('.sidebar-nav-item:not(.sidebar-nav-sub-item)').forEach(function (item) {
-                order.aliskanliklar.push(item.getAttribute('data-view'));
-            });
-        }
 
         /* Pinned/Favorites'teki öğeleri de orijinal gruplarına dahil et */
         var movedItems = document.querySelectorAll('.sidebar-nav-item[data-original-group]');
@@ -2207,8 +2154,6 @@ var App = (function () {
                 order.workspace.push(viewName);
             } else if (origGroup === 'tablolar' && order.tablolar.indexOf(viewName) === -1) {
                 order.tablolar.push(viewName);
-            } else if (origGroup === 'aliskanliklar' && order.aliskanliklar.indexOf(viewName) === -1) {
-                order.aliskanliklar.push(viewName);
             }
         });
 
@@ -2228,7 +2173,6 @@ var App = (function () {
             var mainGroup = document.getElementById('sidebar-nav-group-main');
             var wsGroup = document.getElementById('sidebar-nav-group-workspace');
             var tabGroup = document.getElementById('sidebar-nav-group-tablolar');
-            var alGroup = document.getElementById('sidebar-nav-group-aliskanliklar');
             if (!mainGroup || !wsGroup) return;
 
             /* Tüm nav item'ları topla (alt bölümler hariç) */
@@ -2262,16 +2206,6 @@ var App = (function () {
                 order.tablolar.forEach(function (viewName) {
                     if (allItems[viewName]) {
                         tabGroup.appendChild(allItems[viewName]);
-                        delete allItems[viewName];
-                    }
-                });
-            }
-
-            /* Alışkanlıklar grubuna yerleştir */
-            if (order.aliskanliklar && order.aliskanliklar.length > 0 && alGroup) {
-                order.aliskanliklar.forEach(function (viewName) {
-                    if (allItems[viewName]) {
-                        alGroup.appendChild(allItems[viewName]);
                         delete allItems[viewName];
                     }
                 });
@@ -2717,8 +2651,7 @@ var App = (function () {
         var groupMap = {
             'main': 'sidebar-nav-group-main',
             'workspace': 'sidebar-nav-group-workspace',
-            'tablolar': 'sidebar-nav-group-tablolar',
-            'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+            'tablolar': 'sidebar-nav-group-tablolar'
         };
 
         var groupId = groupMap[groupKey];
@@ -2740,12 +2673,11 @@ var App = (function () {
 
     /* Kaydedilmiş grup collapse durumlarını uygula */
     function loadGroupCollapseStates() {
-        var groups = ['main', 'workspace', 'tablolar', 'aliskanliklar'];
+        var groups = ['main', 'workspace', 'tablolar'];
         var groupMap = {
             'main': 'sidebar-nav-group-main',
             'workspace': 'sidebar-nav-group-workspace',
-            'tablolar': 'sidebar-nav-group-tablolar',
-            'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+            'tablolar': 'sidebar-nav-group-tablolar'
         };
 
         groups.forEach(function(key) {
@@ -2794,9 +2726,6 @@ var App = (function () {
         } else if (groupKey === 'tablolar') {
             newItemLabel = "Yeni tablo";
             addAction = "App.handleGroupAdd('tablolar')";
-        } else if (groupKey === 'aliskanliklar') {
-            newItemLabel = "Yeni alışkanlık";
-            addAction = "App.handleGroupAdd('aliskanliklar')";
         }
         
         dropdown.innerHTML = 
@@ -2824,8 +2753,7 @@ var App = (function () {
         var groupMap = {
             'main': 'sidebar-nav-group-main',
             'workspace': 'sidebar-nav-group-workspace',
-            'tablolar': 'sidebar-nav-group-tablolar',
-            'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+            'tablolar': 'sidebar-nav-group-tablolar'
         };
         var groupEl = document.getElementById(groupMap[groupKey]);
         if (!groupEl) return;
@@ -2850,12 +2778,11 @@ var App = (function () {
     }
 
     function loadGroupTitles() {
-        var groups = ['main', 'workspace', 'tablolar', 'aliskanliklar'];
+        var groups = ['main', 'workspace', 'tablolar'];
         var groupMap = {
             'main': 'sidebar-nav-group-main',
             'workspace': 'sidebar-nav-group-workspace',
-            'tablolar': 'sidebar-nav-group-tablolar',
-            'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+            'tablolar': 'sidebar-nav-group-tablolar'
         };
         groups.forEach(function(key) {
             var title = localStorage.getItem('sidebar_group_title_' + key);
@@ -2893,10 +2820,6 @@ var App = (function () {
                 // Tablolar: Yeni tablo öğesi oluştur
                 addNewGroupItem('tablolar', 'new-table', 'Yeni Tablo');
                 break;
-            case 'aliskanliklar':
-                // Alışkanlıklar: Yeni alışkanlık öğesi oluştur
-                addNewGroupItem('aliskanliklar', 'aliskanlik', 'Yeni Alışkanlık');
-                break;
             case 'main':
                 addNewGroupItem('main', 'notes', 'Yeni not');
                 break;
@@ -2905,13 +2828,12 @@ var App = (function () {
         }
     }
 
-    /* Tablolar, Alışkanlıklar ve Çalışma Alanı grubuna yeni sidebar item ekle */
+    /* Tablolar ve Çalışma Alanı grubuna yeni sidebar item ekle */
     function addNewGroupItem(groupKey, viewType, defaultLabel) {
         var groupMap = {
             'main': 'sidebar-nav-group-main',
             'workspace': 'sidebar-nav-group-workspace',
-            'tablolar': 'sidebar-nav-group-tablolar',
-            'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+            'tablolar': 'sidebar-nav-group-tablolar'
         };
 
         var groupId = groupMap[groupKey];
@@ -2933,8 +2855,6 @@ var App = (function () {
         var iconHtml = '';
         if (viewType === 'new-table') {
             iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>';
-        } else if (viewType === 'aliskanlik') {
-            iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
         } else if (viewType === 'notes') {
             iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3z" /><path d="M14 3v4a2 2 0 0 0 2 2h4" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="13" y2="17" /></svg>';
         } else if (groupKey === 'workspace') {
@@ -2990,8 +2910,7 @@ var App = (function () {
         var groupMap = {
             'main': 'sidebar-nav-group-main',
             'workspace': 'sidebar-nav-group-workspace',
-            'tablolar': 'sidebar-nav-group-tablolar',
-            'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+            'tablolar': 'sidebar-nav-group-tablolar'
         };
 
         var groupId = groupMap[groupKey];
@@ -3033,7 +2952,7 @@ var App = (function () {
 
     /* Kaydedilmiş grup item'larını yükle */
     function loadGroupItems() {
-        ['main', 'workspace', 'tablolar', 'aliskanliklar'].forEach(function(groupKey) {
+        ['main', 'workspace', 'tablolar'].forEach(function(groupKey) {
             var storageKey = 'sidebar_group_items_' + groupKey;
             var stored = localStorage.getItem(storageKey);
             if (!stored) return;
@@ -3041,8 +2960,7 @@ var App = (function () {
             var groupMap = {
                 'main': 'sidebar-nav-group-main',
                 'workspace': 'sidebar-nav-group-workspace',
-                'tablolar': 'sidebar-nav-group-tablolar',
-                'aliskanliklar': 'sidebar-nav-group-aliskanliklar'
+                'tablolar': 'sidebar-nav-group-tablolar'
             };
 
             var groupEl = document.getElementById(groupMap[groupKey]);
@@ -3067,8 +2985,6 @@ var App = (function () {
                     var iconHtml = '';
                     if (viewType === 'new-table') {
                         iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>';
-                    } else if (viewType === 'aliskanlik') {
-                        iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
                     } else if (viewType === 'notes') {
                         iconHtml = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3z" /><path d="M14 3v4a2 2 0 0 0 2 2h4" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="13" y2="17" /></svg>';
                     } else if (groupKey === 'workspace' || item.id.indexOf('team_instance_') === 0) {
@@ -3084,9 +3000,8 @@ var App = (function () {
                     div.setAttribute('data-view-type', viewType);
                     div.setAttribute('data-tooltip', item.label);
                     
-                    var defaultLabel = 'Yeni Alışkanlık';
-                    if (viewType === 'new-table') defaultLabel = 'Yeni Tablo';
-                    else if (viewType === 'notes') defaultLabel = 'Yeni Not';
+                    var defaultLabel = 'Yeni Tablo';
+                    if (viewType === 'notes') defaultLabel = 'Yeni Not';
                     else if (groupKey === 'workspace') defaultLabel = 'Yeni Ekip';
                     div.setAttribute('data-default-label', defaultLabel);
                     div.setAttribute('draggable', 'true');
@@ -3122,10 +3037,6 @@ var App = (function () {
             if (e.target.id === 'new-table-title-input') {
                 syncTitleToSidebar('new-table', e.target.value, 'Yeni Tablo');
             }
-            // Alışkanlık başlığı senkronizasyonu
-            if (e.target.id === 'aliskanlik-title-input') {
-                syncTitleToSidebar('aliskanlik', e.target.value, 'Yeni Alışkanlık');
-            }
         });
     }
 
@@ -3160,8 +3071,6 @@ var App = (function () {
             var groupId = groupEl.id;
             if (groupId === 'sidebar-nav-group-tablolar') {
                 saveGroupItems('tablolar');
-            } else if (groupId === 'sidebar-nav-group-aliskanliklar') {
-                saveGroupItems('aliskanliklar');
             }
         }
     }
