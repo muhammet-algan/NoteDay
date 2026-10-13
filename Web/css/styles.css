@@ -5216,6 +5216,41 @@ input[type="date"].form-control {
     box-sizing: border-box;
 }
 
+.finance-edit-modal .finance-date-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font-size: var(--font-size-md);
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: 42px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    user-select: none;
+}
+
+.finance-edit-modal .finance-date-trigger:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.finance-edit-modal .finance-date-trigger svg {
+    color: var(--color-accent, #6366f1);
+    flex-shrink: 0;
+}
+
+.finance-edit-modal .finance-date-trigger span {
+    flex: 1;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
 .finance-edit-actions {
     display: flex;
     gap: 12px;

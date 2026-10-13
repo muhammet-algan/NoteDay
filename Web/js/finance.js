@@ -275,11 +275,16 @@ var Finance = (function () {
         var incomeActive = entry.type === 'income' ? ' active' : '';
         var expenseActive = entry.type === 'expense' ? ' active' : '';
 
+        var MONTH_NAMES = [
+            'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+            'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+        ];
         var entryDateObj = entry.date ? new Date(entry.date) : new Date();
         if (isNaN(entryDateObj.getTime())) entryDateObj = new Date();
         var entryDateStr = entryDateObj.getFullYear() + '-' +
             String(entryDateObj.getMonth() + 1).padStart(2, '0') + '-' +
             String(entryDateObj.getDate()).padStart(2, '0');
+        var entryDateDisplay = entryDateObj.getDate() + ' ' + MONTH_NAMES[entryDateObj.getMonth()] + ' ' + entryDateObj.getFullYear();
 
         var html = '<div class="modal-overlay" onclick="Finance.closeModal()">' +
             '<div class="modal-content finance-edit-modal" onclick="event.stopPropagation()">' +
@@ -289,7 +294,13 @@ var Finance = (function () {
             '<input type="hidden" id="finance-edit-id" value="' + id + '">' +
             '<div class="form-group">' +
             '<label>Tarih</label>' +
-            '<input type="date" id="finance-edit-date" class="form-control" value="' + entryDateStr + '" required>' +
+            '<input type="hidden" id="finance-edit-date" value="' + entryDateStr + '">' +
+            '<button type="button" class="finance-date-trigger" id="finance-edit-date-btn" onclick="FinanceCalendarPicker.open(\'finance-edit-date\',\'finance-edit-date-label\')">' +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>' +
+            '</svg>' +
+            '<span id="finance-edit-date-label">' + entryDateDisplay + '</span>' +
+            '</button>' +
             '</div>' +
             '<div class="form-group">' +
             '<label>Tür</label>' +
@@ -1285,10 +1296,15 @@ var Finance = (function () {
     /* ---- YENİ KAYIT EKLEME MODALI (Header Butonu İçin) ---- */
 
     function openAddModal() {
+        var MONTH_NAMES = [
+            'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+            'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+        ];
         var today = new Date();
         var todayStr = today.getFullYear() + '-' +
             String(today.getMonth() + 1).padStart(2, '0') + '-' +
             String(today.getDate()).padStart(2, '0');
+        var todayDisplay = today.getDate() + ' ' + MONTH_NAMES[today.getMonth()] + ' ' + today.getFullYear();
 
         var html = '<div class="modal-overlay" onclick="Finance.closeModal()">' +
             '<div class="modal-content finance-edit-modal" onclick="event.stopPropagation()">' +
@@ -1297,7 +1313,13 @@ var Finance = (function () {
             '<form id="finance-add-form" onsubmit="Finance.saveAddModal(event)">' +
             '<div class="form-group">' +
             '<label>Tarih</label>' +
-            '<input type="date" id="finance-add-date" class="form-control" value="' + todayStr + '" required>' +
+            '<input type="hidden" id="finance-add-date" value="' + todayStr + '">' +
+            '<button type="button" class="finance-date-trigger" id="finance-add-date-btn" onclick="FinanceCalendarPicker.open(\'finance-add-date\',\'finance-add-date-label\')">' +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>' +
+            '</svg>' +
+            '<span id="finance-add-date-label">' + todayDisplay + '</span>' +
+            '</button>' +
             '</div>' +
             '<div class="form-group">' +
             '<label>Tür</label>' +

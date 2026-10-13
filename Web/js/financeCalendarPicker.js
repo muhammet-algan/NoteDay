@@ -81,7 +81,14 @@ var FinanceCalendarPicker = (function () {
         /* Mevcut değeri al ve seçili tarihi belirle */
         var input = document.getElementById(inputId);
         if (input && input.value) {
-            selectedDate = new Date(input.value);
+            var val = input.value;
+            if (/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+                var p = val.split('-');
+                selectedDate = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+            } else {
+                selectedDate = new Date(val);
+            }
+            if (isNaN(selectedDate.getTime())) selectedDate = new Date();
         } else {
             selectedDate = new Date();
         }
