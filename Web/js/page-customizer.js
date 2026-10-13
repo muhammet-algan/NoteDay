@@ -604,14 +604,14 @@ var PageCustomizer = (function () {
             if (financeSection) {
                 financeSection.className = financeSection.className.replace(/\bcust-bg-\S+/g, '');
                 var savedOptions = localStorage.getItem('finance_cust_options');
-                var color = 'siyah';
+                var color = 'mavi';
                 if (savedOptions) {
                     try {
                         var parsed = JSON.parse(savedOptions);
-                        if (parsed && parsed.color) color = parsed.color;
+                        if (parsed && parsed.color && parsed.color !== 'siyah') color = parsed.color;
                     } catch(e) {}
                 }
-                if (color === 'default' || color === 'brown' || color === 'pink' || color === 'gray' || color === 'yellow' || color === 'green' || color === 'blue' || color === 'purple' || color === 'red') color = 'siyah';
+                if (color === 'default' || color === 'brown' || color === 'pink' || color === 'gray' || color === 'yellow' || color === 'green' || color === 'blue' || color === 'purple' || color === 'red' || color === 'siyah') color = 'mavi';
                 financeSection.classList.add('cust-bg-' + color);
             }
         } catch(e) {
