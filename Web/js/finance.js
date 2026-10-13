@@ -61,7 +61,13 @@ var Finance = (function () {
         var desc = descInput.value.trim();     /* Açıklama */
 
         /* Zorunlu alan kontrolü */
-        if (!type || isNaN(amount) || amount <= 0) return;
+        if (!type) return;
+        if (isNaN(amount) || amount <= 0) {
+            if (typeof Toast !== 'undefined' && Toast.error) {
+                Toast.error('Tutar sıfırdan büyük olmalıdır. Negatif veya sıfır tutar girilemez.');
+            }
+            return;
+        }
 
         var entries = getEntries();
         var editingId = form.getAttribute('data-editing-id');
@@ -372,7 +378,13 @@ var Finance = (function () {
         var category = document.getElementById('finance-edit-category').value;
         var desc = document.getElementById('finance-edit-desc').value.trim();
 
-        if (!type || isNaN(amount) || amount <= 0) return;
+        if (!type) return;
+        if (isNaN(amount) || amount <= 0) {
+            if (typeof Toast !== 'undefined' && Toast.error) {
+                Toast.error('Tutar sıfırdan büyük olmalıdır. Negatif veya sıfır tutar girilemez.');
+            }
+            return;
+        }
 
         var entries = getEntries();
         var entry = entries.find(function (e) { return e.id === id; });
@@ -467,9 +479,13 @@ var Finance = (function () {
         if (!listBody) return;
 
         if (entries.length === 0) {
-            listBody.innerHTML = '<div class="empty-state"><p>Bu dönemde kayıt yok.</p></div>';
+            var emptyMsg = (allEntries.length === 0) ? 'Henüz kayıtlı işleminiz yok' : 'Bu dönemde kayıt yok.';
+            listBody.innerHTML = '<div class="empty-state"><p>' + emptyMsg + '</p></div>';
             if (window.FinanceCalendar) {
                 FinanceCalendar.render();
+            }
+            if (typeof Budget !== 'undefined' && Budget.updateUserBalanceDisplay) {
+                Budget.updateUserBalanceDisplay();
             }
             return;
         }
@@ -498,6 +514,9 @@ var Finance = (function () {
 
         if (window.FinanceCalendar) {
             FinanceCalendar.render();
+        }
+        if (typeof Budget !== 'undefined' && Budget.updateUserBalanceDisplay) {
+            Budget.updateUserBalanceDisplay();
         }
     }
 
@@ -1231,7 +1250,8 @@ var Finance = (function () {
         if (!listEl) return;
 
         if (filtered.length === 0) {
-            listEl.innerHTML = '<div class="empty-state"><p>Bu dönemde kayıt yok.</p></div>';
+            var emptyHistoryMsg = (getEntries().length === 0) ? 'Henüz kayıtlı işleminiz yok' : 'Bu dönemde kayıt yok.';
+            listEl.innerHTML = '<div class="empty-state"><p>' + emptyHistoryMsg + '</p></div>';
             return;
         }
 
@@ -1400,7 +1420,13 @@ var Finance = (function () {
         var category = document.getElementById('finance-add-category').value;
         var desc = document.getElementById('finance-add-desc').value.trim();
 
-        if (!type || isNaN(amount) || amount <= 0) return;
+        if (!type) return;
+        if (isNaN(amount) || amount <= 0) {
+            if (typeof Toast !== 'undefined' && Toast.error) {
+                Toast.error('Tutar sıfırdan büyük olmalıdır. Negatif veya sıfır tutar girilemez.');
+            }
+            return;
+        }
 
         var entryDate;
         if (dateVal) {

@@ -25225,3 +25225,139 @@ body.row-resize-active * {
     width: 100%;
 }
 
+/* 9. GÜNCEL BAKİYE GÖSTERGELERİ (SIDEBAR & HEADER) */
+.sidebar-user-balance {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-secondary, #64748b);
+    margin-top: 1px;
+    letter-spacing: 0.2px;
+}
+
+.sidebar-user-balance.text-pos,
+.hub-amount.text-pos {
+    color: #10b981 !important;
+}
+
+.sidebar-user-balance.text-neg,
+.hub-amount.text-neg {
+    color: #ef4444 !important;
+}
+
+.header-user-balance-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: var(--color-bg-inset, #f1f5f9);
+    border: 1px solid var(--color-border-subtle, #e2e8f0);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--color-text, #1e293b);
+    transition: all 0.2s ease;
+}
+
+.header-user-balance-pill:hover {
+    background: var(--color-bg-elevated, #fff);
+    border-color: var(--color-accent, #3b82f6);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
+.header-user-balance-pill svg {
+    color: var(--color-accent, #3b82f6);
+    flex-shrink: 0;
+}
+
+.hub-label {
+    font-size: 11.5px;
+    color: var(--color-text-secondary, #64748b);
+    font-weight: 500;
+}
+
+.hub-amount {
+    font-weight: 700;
+}
+
+/* 10. KULLANICI PROFİLİNDE ROZETLER */
+.settings-badges-section {
+    margin-top: 10px;
+}
+
+.profile-badges-grid-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.profile-badge-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--color-bg-inset, #f8fafc);
+    border: 1px solid var(--color-border-subtle, #e2e8f0);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.profile-badge-item:hover {
+    transform: translateY(-2px);
+}
+
+.profile-badge-item.badge-earned {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, var(--color-bg-elevated, #fff) 85%, rgba(245, 158, 11, 0.06) 100%);
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.12);
+}
+
+.profile-badge-item.badge-unearned {
+    opacity: 0.75;
+}
+
+.pbi-icon-wrap {
+    font-size: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pbi-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.pbi-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-text, #1e293b);
+}
+
+.pbi-desc {
+    font-size: 11.5px;
+    color: var(--color-text-secondary, #64748b);
+    margin: 2px 0 6px 0;
+    line-height: 1.35;
+}
+
+.pbi-status-pill {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.pbi-status-pill.earned {
+    background: #f59e0b20;
+    color: #b45309;
+    border: 1px solid #f59e0b40;
+}
+
+.pbi-status-pill.locked {
+    background: var(--color-bg-subtle, #e2e8f0);
+    color: var(--color-text-secondary, #64748b);
+}
+

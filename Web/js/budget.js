@@ -131,6 +131,10 @@ var Budget = (function () {
         // Rozet durumlarını kontrol et
         checkAllBadges(false);
 
+        // Bakiye göstergesini güncelle
+        updateUserBalanceDisplay();
+        renderProfileBadges();
+
         // Sekmeyi aktif et
         switchTab(activeTab, false);
     }
@@ -263,7 +267,8 @@ var Budget = (function () {
                 statusClass = 'status-danger';
                 barColor = '#ef4444';
                 dangerCount++;
-                statusBadge = '<span class="budget-badge badge-danger">🚨 Limit Aşıldı (%' + pct + ')</span>';
+                var overAmount = spent - limit;
+                statusBadge = '<span class="budget-badge badge-danger">🚨 Limit Aşıldı (Aşım: +' + formatMoney(overAmount) + ', %' + pct + ')</span>';
             } else if (pct >= 80) {
                 statusClass = 'status-warning';
                 barColor = '#f59e0b';
@@ -452,12 +457,13 @@ var Budget = (function () {
         var pct = Math.round((spent / limit) * 100);
 
         if (pct >= 100) {
+            var overAmount = spent - limit;
             if (typeof Toast !== 'undefined') {
-                Toast.show('🚨 DİKKAT: "' + cat + '" kategorisinde aylık limit aşıldı! (' + formatMoney(spent) + ' / ' + formatMoney(limit) + ')', 'error', 6000);
+                Toast.show('🚨 DİKKAT: "' + cat + '" kategorisinde limit aşıldı! Aşım Miktarı: +' + formatMoney(overAmount) + ' (Harcama: ' + formatMoney(spent) + ', Limit: ' + formatMoney(limit) + ')', 'error', 6500);
             }
         } else if (pct >= 80) {
             if (typeof Toast !== 'undefined') {
-                Toast.show('⚠️ UYARI: "' + cat + '" kategorisinde aylık bütçenizin %' + pct + '\'ine ulaştınız!', 'warning', 5000);
+                Toast.show('⚠️ UYARI: "' + cat + '" kategorisinde aylık limitin %' + pct + '\'ine ulaşıldı!', 'warning', 5000);
             }
         }
     }
@@ -541,11 +547,32 @@ var Budget = (function () {
 
         var html = '<div class="report-distribution-section">';
         
-        // Dağılım Çubuğu (Görsel Yüzdelik Bar)
-        html += '<div class="report-multi-bar" title="Kategori Harcama Dağılımı">';
+        // Yüzdelerin toplamının tam olarak %100 olmasını garantile
+        var catPcts = {};
+        var sumPcts = 0;
+        var totalTxCount = 0;
         sortedCategories.forEach(function (cat) {
             var spent = categoryTotals[cat];
-            var pct = totalExpense > 0 ? ((spent / totalExpense) * 100).toFixed(1) : 0;
+            totalTxCount += (categoryCount[cat] || 1);
+            var p = totalExpense > 0 ? parseFloat(((spent / totalExpense) * 100).toFixed(1)) : 0;
+            catPcts[cat] = p;
+            sumPcts += p;
+        });
+
+        // Küçük yuvarlama farklarını normalize et (toplamı tam 100.0 yap)
+        if (sortedCategories.length > 0 && totalExpense > 0) {
+            var diff = +(100.0 - sumPcts).toFixed(1);
+            if (Math.abs(diff) > 0 && Math.abs(diff) < 2) {
+                var firstCat = sortedCategories[0];
+                catPcts[firstCat] = +(catPcts[firstCat] + diff).toFixed(1);
+            }
+        }
+
+        // Dağılım Çubuğu (Görsel Yüzdelik Bar)
+        html += '<div class="report-multi-bar" title="Kategori Harcama Dağılımı (Toplam %100)">';
+        sortedCategories.forEach(function (cat) {
+            var spent = categoryTotals[cat];
+            var pct = (catPcts[cat] !== undefined) ? catPcts[cat].toFixed(1) : '0.0';
             var color = CATEGORY_COLORS[cat] || '#64748b';
             html += '<div class="report-multi-bar-seg" style="width: ' + pct + '%; background-color: ' + color + ';" title="' + escapeHtml(cat) + ': %' + pct + ' (' + formatMoney(spent) + ')"></div>';
         });
@@ -569,7 +596,7 @@ var Budget = (function () {
         sortedCategories.forEach(function (cat) {
             var spent = categoryTotals[cat];
             var count = categoryCount[cat] || 1;
-            var pct = totalExpense > 0 ? ((spent / totalExpense) * 100).toFixed(1) : 0;
+            var pct = (catPcts[cat] !== undefined) ? catPcts[cat].toFixed(1) : '0.0';
             var icon = CATEGORY_ICONS[cat] || '🏷️';
             var color = CATEGORY_COLORS[cat] || '#3b82f6';
 
@@ -594,6 +621,19 @@ var Budget = (function () {
 
         html += 
             '    </tbody>' +
+            '    <tfoot>' +
+            '      <tr style="font-weight:700; border-top: 2px solid var(--color-border-subtle, #e2e8f0); background: var(--color-bg-inset, #f8fafc);">' +
+            '        <td>Toplam</td>' +
+            '        <td style="color:var(--color-text-secondary);">' + totalTxCount + ' işlem</td>' +
+            '        <td style="color:var(--color-danger, #ef4444);">' + formatMoney(totalExpense) + '</td>' +
+            '        <td><span class="report-pct-badge" style="background:#10b98125; color:#059669; font-weight:800;">%100.0</span></td>' +
+            '        <td>' +
+            '          <div class="bl-progress-track" style="height:8px;">' +
+            '            <div class="bl-progress-fill" style="width:100%; background-color:#10b981;"></div>' +
+            '          </div>' +
+            '        </td>' +
+            '      </tr>' +
+            '    </tfoot>' +
             '  </table>' +
             '</div>';
 
@@ -1079,12 +1119,107 @@ var Budget = (function () {
         else if (activeTab === 'reports') renderReports();
         else if (activeTab === 'badges') renderBadges();
         updateAlertBadgesUI();
+        updateUserBalanceDisplay();
+        renderProfileBadges();
+    }
+
+    /* Güncel Bakiye Hesaplama ve Ekranda Güncelleme */
+    function getCurrentBalance() {
+        var entries = (typeof Finance !== 'undefined' && Finance.getEntries) ? Finance.getEntries() : [];
+        var totalIncome = 0;
+        var totalExpense = 0;
+        entries.forEach(function (e) {
+            var amt = parseFloat(e.amount) || 0;
+            if (e.type === 'income') totalIncome += amt;
+            else if (e.type === 'expense') totalExpense += amt;
+        });
+        return totalIncome - totalExpense;
+    }
+
+    function updateUserBalanceDisplay() {
+        var bal = getCurrentBalance();
+        var formatted = (bal >= 0 ? '+' : '-') + formatMoney(Math.abs(bal));
+
+        // Kenar çubuğu bakiye göstergesi
+        var sidebarBal = document.getElementById('sidebar-user-balance');
+        if (sidebarBal) {
+            sidebarBal.textContent = 'Bakiye: ' + formatted;
+            sidebarBal.className = 'sidebar-user-balance ' + (bal >= 0 ? 'text-pos' : 'text-neg');
+        }
+
+        // Header bakiye hapı
+        var headerBal = document.getElementById('header-user-balance');
+        if (headerBal) {
+            headerBal.textContent = formatted;
+            headerBal.className = 'hub-amount ' + (bal >= 0 ? 'text-pos' : 'text-neg');
+        }
+    }
+
+    /* Kullanıcı Profilinde Rozetlerin Listelenmesi */
+    function renderProfileBadges() {
+        var container = document.getElementById('profile-badges-container');
+        if (!container) return;
+
+        var badges = checkAllBadges(false);
+        var streakInfo = calculateStreak();
+
+        var badgeItems = [
+            { 
+                id: 'disciplined', 
+                badge: badges.disciplined, 
+                icon: '🏅', 
+                title: 'Disiplinli Bütçeci', 
+                desc: 'Bir ayı hiçbir kategori limitini aşmadan tamamlayan kullanıcıya verilir.' 
+            },
+            { 
+                id: 'hunter', 
+                badge: badges.hunter, 
+                icon: '🎯', 
+                title: 'Hedef Avcısı', 
+                desc: 'İlk tasarruf hedefini (%100) başarıyla tamamlayan kullanıcıya verilir.' 
+            },
+            { 
+                id: 'streak', 
+                badge: badges.streak, 
+                icon: '🔥', 
+                title: 'Düzenli Kayıtçı', 
+                desc: '30 gün üst üste işlem kaydı giren kullanıcıya verilir (Seri: ' + streakInfo.currentStreak + '/30).' 
+            }
+        ];
+
+        var html = '<div class="profile-badges-grid-list">';
+        badgeItems.forEach(function (b) {
+            var isUnlocked = b.badge && b.badge.unlocked;
+            var dateStr = (isUnlocked && b.badge.unlockedAt) 
+                ? new Date(b.badge.unlockedAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+                : null;
+
+            html += 
+                '<div class="profile-badge-item ' + (isUnlocked ? 'badge-earned' : 'badge-unearned') + '">' +
+                '  <div class="pbi-icon-wrap">' + b.icon + '</div>' +
+                '  <div class="pbi-details">' +
+                '    <div class="pbi-title">' + escapeHtml(b.title) + '</div>' +
+                '    <div class="pbi-desc">' + escapeHtml(b.desc) + '</div>' +
+                '    <div class="pbi-status">' + 
+                       (isUnlocked 
+                           ? '<span class="pbi-status-pill earned">✨ Kazanıldı (' + dateStr + ')</span>' 
+                           : '<span class="pbi-status-pill locked">🔒 Kilitli</span>') + 
+                '    </div>' +
+                '  </div>' +
+                '</div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
     }
 
     /* Dışarıya Açılan API */
     return {
         init: init,
         switchTab: switchTab,
+        // Bakiye & Profil
+        getCurrentBalance: getCurrentBalance,
+        updateUserBalanceDisplay: updateUserBalanceDisplay,
+        renderProfileBadges: renderProfileBadges,
         // Kategori filtreleme
         renderCategoryFilter: renderCategoryFilter,
         setCategoryFilter: setCategoryFilter,

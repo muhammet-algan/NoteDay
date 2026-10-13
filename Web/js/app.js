@@ -228,8 +228,11 @@ var App = (function () {
         var savedSection = localStorage.getItem('app_current_section');
         showSection(savedSection && savedSection !== 'home' ? savedSection : 'notes');
 
-        /* Kenar çubuğu badge'lerini güncelle */
+        /* Kenar çubuğu badge'lerini ve bakiye göstergesini güncelle */
         updateSidebarBadges();
+        if (typeof Budget !== 'undefined' && Budget.updateUserBalanceDisplay) {
+            Budget.updateUserBalanceDisplay();
+        }
         scheduleMidnightReset();
 
         /* Menü düzeni tercihlerini uygula */
@@ -698,7 +701,7 @@ var App = (function () {
         var dropdown = document.getElementById('user-dropdown');
         if (dropdown) dropdown.classList.remove('open');
 
-        showLanding();
+        showAuth('login');
     }
 
     /* Çıkış onay modalını göster */

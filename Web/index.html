@@ -294,6 +294,7 @@
                             <div id="user-avatar" class="sidebar-avatar">U</div>
                             <div class="sidebar-user-info">
                                 <div id="user-name" class="sidebar-user-name">Kullanıcı</div>
+                                <div id="sidebar-user-balance" class="sidebar-user-balance" title="Güncel Bakiye">Bakiye: 0,00 TL</div>
                             </div>
                         </div>
                         <div id="user-dropdown" class="user-dropdown">
@@ -684,6 +685,13 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Güncel Bakiye Göstergesi -->
+                        <div id="header-user-balance-pill" class="header-user-balance-pill" title="Güncel Bakiye (Finanslarımı aç)" onclick="App.showSection('finance'); Budget.switchTab('transactions');">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            <span class="hub-label">Bakiye:</span>
+                            <span id="header-user-balance" class="hub-amount">0,00 TL</span>
+                        </div>
+
                         <button id="notif-floating-btn" class="notif-floating-btn" onclick="Notifications.togglePanel()"
                             title="Bildirimler">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -2477,6 +2485,18 @@
                             <input type="email" id="settings-email" class="form-control" placeholder="E-posta adresiniz">
                         </div>
                         <button class="btn btn-primary settings-submit-btn" onclick="Settings.saveProfile()">Bilgileri Güncelle</button>
+                    </div>
+
+                    <div class="settings-section-divider"></div>
+
+                    <!-- KAZANILAN BAŞARI ROZETLERİ -->
+                    <div class="settings-badges-section">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <h3 class="settings-pane-subtitle-small" style="margin:0;">Kazanılan Başarı Rozetleri</h3>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="Settings.closeSettings(); App.showSection('finance'); Budget.switchTab('badges');">Rozetleri İncele</button>
+                        </div>
+                        <p class="settings-row-desc" style="margin-bottom:14px;">Bütçe takibi ve tasarruf hedefleri doğrultusunda kazandığınız başarı rozetleri.</p>
+                        <div id="profile-badges-container" class="profile-badges-grid"></div>
                     </div>
                 </div>
 

@@ -229,6 +229,11 @@ var Settings = (function () {
             }
         }
 
+        // Kullanıcı Profilinde Rozetleri Listele
+        if (typeof Budget !== 'undefined' && Budget.renderProfileBadges) {
+            Budget.renderProfileBadges();
+        }
+
         // Bildirimler
         var notifyRem = document.getElementById('settings-notify-reminders');
         var notifySound = document.getElementById('settings-notify-sound');

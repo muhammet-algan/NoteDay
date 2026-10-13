@@ -69,6 +69,13 @@ var Auth = (function () {
             return;
         }
 
+        /* Geçerli e-posta formatı kontrolü */
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showError('register-error', 'Lütfen geçerli bir e-posta adresi girin.');
+            return;
+        }
+
         /* Şifre uzunluk kontrolü */
         if (password.length < 6) {
             showError('register-error', 'Şifre en az 6 karakter olmalıdır.');
