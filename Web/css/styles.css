@@ -840,64 +840,43 @@ input[type="date"].form-control {
     flex-shrink: 0;
 }
 
-/* Üst Arama Butonu (Küçültülmüş ve Daralan Menünün solunda) */
+/* Üst Arama Butonu (Sadece ikon, kutucuksuz - Daralan Menünün solunda) */
 .sidebar-search-btn.top-search-btn {
-    width: auto;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 6px;
+    border: none !important;
+    background: transparent !important;
+    color: var(--color-text-secondary) !important;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 8px;
-    height: 32px;
-    border-radius: 6px;
-    border: 1px solid var(--color-border-subtle);
-    background: #ffffff;
-    color: var(--color-text-secondary);
-    font-size: 12px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
     box-sizing: border-box;
 }
 
 .sidebar-search-btn.top-search-btn:hover {
-    background: var(--color-bg-subtle);
-    border-color: var(--color-border);
-    color: var(--color-text-primary);
+    background: var(--color-bg-subtle) !important;
+    color: var(--color-text) !important;
 }
 
 .sidebar-search-btn.top-search-btn svg {
     flex-shrink: 0;
-    color: var(--color-text-secondary);
-}
-
-.sidebar-search-btn.top-search-btn .sidebar-search-label {
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.sidebar-search-btn.top-search-btn .sidebar-search-kbd {
-    font-size: 10px;
-    padding: 1px 5px;
-    border-radius: 3px;
-    background: var(--color-bg-subtle);
-    border: 1px solid var(--color-border-subtle);
-    color: var(--color-text-muted);
+    color: inherit;
+    transition: color 0.15s ease;
 }
 
 [data-theme="dark"] .sidebar-search-btn.top-search-btn {
-    background: var(--color-bg-surface);
-    border-color: var(--color-border-subtle);
-    color: var(--color-text-secondary);
+    background: transparent !important;
+    color: var(--color-text-secondary) !important;
 }
 
 [data-theme="dark"] .sidebar-search-btn.top-search-btn:hover {
-    background: var(--color-bg-hover);
-    color: var(--color-text-primary);
-}
-
-[data-theme="dark"] .sidebar-search-btn.top-search-btn .sidebar-search-kbd {
-    background: var(--color-bg-surface-elevated, #374151);
-    border-color: var(--color-border-subtle);
+    background: var(--color-bg-hover) !important;
+    color: #ffffff !important;
 }
 
 /* Toggle buton – sidebar brand içindeki menüyü daraltma butonu */
