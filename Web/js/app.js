@@ -248,6 +248,10 @@ var App = (function () {
         }
     }
 
+    function goHome() {
+        showSection('board');
+    }
+
     function navigateToMainSection(sectionName) {
         if ((sectionName === 'notes' || sectionName.indexOf('team_instance_') === 0 || sectionName.indexOf('notes_instance_') === 0) && typeof Notes !== 'undefined') {
             if (Notes.closeModal) Notes.closeModal();
@@ -3232,6 +3236,7 @@ var App = (function () {
         handleLogout: handleLogout,
         closeLogoutModal: closeLogoutModal,
         confirmLogout: confirmLogout,
+        goHome: goHome,
         toggleSidebar: toggleSidebar,
         updateSidebarBadges: updateSidebarBadges,
         showNavContextMenu: showNavContextMenu,

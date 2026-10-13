@@ -287,97 +287,109 @@
         <div class="dashboard">
             <!-- Kenar çubuğu (Sidebar) - Navigasyon menüsü -->
             <aside class="sidebar">
-                <!-- ÜST: Kullanıcı Profili + Kapat Butonu (notum Style) -->
+                <!-- ÜST: Ana Sayfa Butonu + Arama + Kapat Butonu -->
                 <div class="sidebar-brand">
-                    <div class="sidebar-brand-left">
-                        <div class="sidebar-user" id="sidebar-user-trigger" onclick="Settings.toggleUserMenu()">
-                            <div id="user-avatar" class="sidebar-avatar">U</div>
-                            <div class="sidebar-user-info">
-                                <div id="user-name" class="sidebar-user-name">Kullanıcı</div>
-                                <div id="sidebar-user-balance" class="sidebar-user-balance" title="Güncel Bakiye">Bakiye: 0,00 TL</div>
-                            </div>
-                        </div>
-                        <div id="user-dropdown" class="user-dropdown">
-                            <!-- E-posta satırı -->
-                            <div class="udm-email-row">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                                <span id="udm-email">kullanici@email.com</span>
-                            </div>
-                            <div class="user-dropdown-divider"></div>
-
-                            <!-- Profil satırı -->
-                            <button class="udm-profile-row"
-                                onclick="Settings.openSettingsPage(); Settings.switchTab('profile');">
-                                <div id="udm-avatar" class="udm-avatar">U</div>
-                                <span id="udm-name">Kullanıcı</span>
-                            </button>
-                            <div class="user-dropdown-divider"></div>
-
-                            <!-- Kişiselleştirme -->
-                            <button class="user-dropdown-item"
-                                onclick="Settings.openSettingsPage(); Settings.switchTab('appearance');">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="5" />
-                                    <line x1="12" y1="1" x2="12" y2="3" />
-                                    <line x1="12" y1="21" x2="12" y2="23" />
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                                    <line x1="1" y1="12" x2="3" y2="12" />
-                                    <line x1="21" y1="12" x2="23" y2="12" />
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                                </svg>
-                                Kişiselleştirme
-                            </button>
-
-                            <!-- Ayarlar -->
-                            <button class="user-dropdown-item" onclick="Settings.openSettingsPage()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="3" />
-                                    <path
-                                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                                </svg>
-                                Ayarlar
-                            </button>
-                            <div class="user-dropdown-divider"></div>
-
-                            <!-- çöp Kutusu -->
-                            <button class="user-dropdown-item" onclick="Trash.openTrash()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                                </svg>
-                                çöp Kutusu
-                            </button>
-                            <div class="user-dropdown-divider"></div>
-
-                            <!-- Oturumu kapat -->
-                            <button class="user-dropdown-item user-dropdown-logout" onclick="App.handleLogout()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                    <polyline points="16 17 21 12 16 7" />
-                                    <line x1="21" y1="12" x2="9" y2="12" />
-                                </svg>
-                                Oturumu kapat
-                            </button>
-                        </div>
-                    </div>
-                    <button class="sidebar-toggle-btn" onclick="App.toggleSidebar()" title="Menüyü kapat">
-                        <svg class="sidebar-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="3" rx="2" />
-                            <line x1="9" y1="3" x2="9" y2="21" />
+                    <!-- SOL: Ana Sayfa Butonu (2. görseldeki gibi) -->
+                    <button class="sidebar-home-btn" onclick="App.goHome()" title="Ana Sayfa">
+                        <svg class="home-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 3L2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7V4h-3v2.7L12 3z"/>
                         </svg>
+                        <span>Ana Sayfa</span>
+                    </button>
+
+                    <!-- SAĞ: Arama Çubuğu + Daralan Menü Butonu -->
+                    <div class="sidebar-brand-right">
+                        <button class="sidebar-search-btn top-search-btn" onclick="Search.openSearchPage()" title="Uygulama İçi Arama (Ctrl+K)">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <span class="sidebar-search-label">Ara</span>
+                            <kbd class="sidebar-search-kbd">Ctrl+K</kbd>
+                        </button>
+                        <button class="sidebar-toggle-btn" onclick="App.toggleSidebar()" title="Menüyü kapat">
+                            <svg class="sidebar-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="2" />
+                                <line x1="9" y1="3" x2="9" y2="21" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kullanıcı Dropdown Menüsü (Gerekli olduğunda açılır) -->
+                <div id="user-dropdown" class="user-dropdown" style="display:none;">
+                    <!-- E-posta satırı -->
+                    <div class="udm-email-row">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span id="udm-email">kullanici@email.com</span>
+                    </div>
+                    <div class="user-dropdown-divider"></div>
+
+                    <!-- Profil satırı -->
+                    <button class="udm-profile-row"
+                        onclick="Settings.openSettingsPage(); Settings.switchTab('profile');">
+                        <div id="udm-avatar" class="udm-avatar">U</div>
+                        <span id="udm-name">Kullanıcı</span>
+                    </button>
+                    <div class="user-dropdown-divider"></div>
+
+                    <!-- Kişiselleştirme -->
+                    <button class="user-dropdown-item"
+                        onclick="Settings.openSettingsPage(); Settings.switchTab('appearance');">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5" />
+                            <line x1="12" y1="1" x2="12" y2="3" />
+                            <line x1="12" y1="21" x2="12" y2="23" />
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                            <line x1="1" y1="12" x2="3" y2="12" />
+                            <line x1="21" y1="12" x2="23" y2="12" />
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                        </svg>
+                        Kişiselleştirme
+                    </button>
+
+                    <!-- Ayarlar -->
+                    <button class="user-dropdown-item" onclick="Settings.openSettingsPage()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>
+                        Ayarlar
+                    </button>
+                    <div class="user-dropdown-divider"></div>
+
+                    <!-- çöp Kutusu -->
+                    <button class="user-dropdown-item" onclick="Trash.openTrash()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                        çöp Kutusu
+                    </button>
+                    <div class="user-dropdown-divider"></div>
+
+                    <!-- Oturumu kapat -->
+                    <button class="user-dropdown-item user-dropdown-logout" onclick="App.handleLogout()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        Oturumu kapat
                     </button>
                 </div>
 
@@ -555,18 +567,6 @@
                     <button class="sidebar-ctx-item sidebar-ctx-item-trash" data-action="trash">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         <span>Çöp Kutusuna Taşı</span>
-                    </button>
-                </div>
-
-                <!-- ALT: Arama Butonu -->
-                <div class="sidebar-bottom">
-                    <button class="sidebar-search-btn" onclick="Search.openSearchPage()" title="Uygulama İçi Arama (Ctrl+K)">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <span class="sidebar-search-label">Ara</span>
-                        <kbd class="sidebar-search-kbd">Ctrl+K</kbd>
                     </button>
                 </div>
             </aside>
