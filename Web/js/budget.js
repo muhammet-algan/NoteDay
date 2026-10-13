@@ -173,7 +173,6 @@ var Budget = (function () {
 
         // İlgili sekmenin içeriğini render et
         if (tabId === 'transactions') {
-            renderCategoryFilter();
             if (typeof Finance !== 'undefined' && Finance.render) {
                 Finance.render();
             }
@@ -190,63 +189,10 @@ var Budget = (function () {
         updateAlertBadgesUI();
     }
 
-    /* ==========================================================================
-       1. İŞLEM LİSTESİNDE KATEGORİ FİLTRELEME
-       ========================================================================== */
-
-    function getAvailableCategories() {
-        var set = {};
-        DEFAULT_CATEGORIES.forEach(function(c) { set[c] = true; });
-
-        if (typeof Finance !== 'undefined' && Finance.getEntries) {
-            var entries = Finance.getEntries();
-            entries.forEach(function (e) {
-                if (e.category && e.category.trim()) {
-                    set[e.category.trim()] = true;
-                }
-            });
-        }
-
-        return Object.keys(set).sort();
-    }
-
-    function renderCategoryFilter() {
-        var container = document.getElementById('finance-category-filter-bar');
-        if (!container) return;
-
-        var categories = getAvailableCategories();
-        var html = '<div class="budget-filter-scroll">';
-        
-        // "Tümü" butonu
-        var isAllActive = categoryFilter === '' ? ' active' : '';
-        html += '<button type="button" class="budget-filter-pill' + isAllActive + '" onclick="Budget.setCategoryFilter(\'\')">' +
-            '<span>Tümü</span>' +
-        '</button>';
-
-        // Her kategori için buton
-        categories.forEach(function (cat) {
-            var isActive = categoryFilter === cat ? ' active' : '';
-            var icon = CATEGORY_ICONS[cat] || '🏷️';
-            html += '<button type="button" class="budget-filter-pill' + isActive + '" onclick="Budget.setCategoryFilter(\'' + escapeHtml(cat) + '\')">' +
-                '<span>' + icon + ' ' + escapeHtml(cat) + '</span>' +
-            '</button>';
-        });
-
-        html += '</div>';
-        container.innerHTML = html;
-    }
-
-    function setCategoryFilter(cat) {
-        categoryFilter = cat;
-        renderCategoryFilter();
-        if (typeof Finance !== 'undefined' && Finance.render) {
-            Finance.render();
-        }
-    }
-
-    function getCurrentCategoryFilter() {
-        return categoryFilter;
-    }
+    /* Kategori filtreleme kaldırıldı */
+    function renderCategoryFilter() {}
+    function setCategoryFilter() {}
+    function getCurrentCategoryFilter() { return ''; }
 
     /* ==========================================================================
        2. BÜTÇE LİMİTLERİ & UYARI SİSTEMİ (%80 Sarı, %100 Kırmızı)

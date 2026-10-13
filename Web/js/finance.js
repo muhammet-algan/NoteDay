@@ -258,21 +258,15 @@ var Finance = (function () {
         return { start: start, end: end };
     }
 
-    /* Kayıtları tarih aralığına ve seçili kategoriye göre filtreleme */
+    /* Kayıtları tarih aralığına göre filtreleme */
     function filterEntries(entries) {
         var range = getDateRange();
-        var catFilter = (typeof Budget !== 'undefined' && Budget.getCurrentCategoryFilter) ? Budget.getCurrentCategoryFilter() : '';
+        if (!range.start && !range.end) return entries;
 
         return entries.filter(function (entry) {
-            if (range.start || range.end) {
-                var entryDate = new Date(entry.date);
-                if (range.start && entryDate < range.start) return false;
-                if (range.end && entryDate > range.end) return false;
-            }
-            if (catFilter) {
-                var entryCat = (entry.category || '').trim().toLowerCase();
-                if (entryCat !== catFilter.trim().toLowerCase()) return false;
-            }
+            var entryDate = new Date(entry.date);
+            if (range.start && entryDate < range.start) return false;
+            if (range.end && entryDate > range.end) return false;
             return true;
         });
     }
@@ -467,10 +461,6 @@ var Finance = (function () {
 
         var allEntries = getEntries();
         var entries = filterEntries(allEntries);
-
-        if (typeof Budget !== 'undefined' && Budget.renderCategoryFilter) {
-            Budget.renderCategoryFilter();
-        }
 
         /* Kayıt listesini oluştur */
         var listBody = document.getElementById('finance-list-body');
