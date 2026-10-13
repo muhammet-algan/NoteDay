@@ -55,7 +55,7 @@ var Budget = (function () {
     };
 
     // Durum değişkenleri
-    var activeTab = 'transactions'; // 'transactions' | 'budgets' | 'reports' | 'goals' | 'badges'
+    var activeTab = 'transactions'; // 'transactions' | 'balance' | 'budgets' | 'reports' | 'goals' | 'badges'
     var categoryFilter = ''; // '' = tümü
     var reportDate = new Date(); // Rapor ayı için tarih nesnesi
 
@@ -121,7 +121,7 @@ var Budget = (function () {
 
     function init() {
         var savedTab = localStorage.getItem(STORAGE_ACTIVE_TAB);
-        if (savedTab && ['transactions', 'budgets', 'reports', 'goals', 'badges'].indexOf(savedTab) !== -1) {
+        if (savedTab && ['transactions', 'balance', 'budgets', 'reports', 'goals', 'badges'].indexOf(savedTab) !== -1) {
             activeTab = savedTab;
         }
 
@@ -180,6 +180,8 @@ var Budget = (function () {
             if (typeof Finance !== 'undefined' && Finance.render) {
                 Finance.render();
             }
+        } else if (tabId === 'balance') {
+            renderBalanceTab();
         } else if (tabId === 'budgets') {
             renderBudgets();
         } else if (tabId === 'reports') {
@@ -1115,7 +1117,8 @@ var Budget = (function () {
             checkTransactionLimitAlert(newEntry);
         }
         checkAllBadges(true);
-        if (activeTab === 'budgets') renderBudgets();
+        if (activeTab === 'balance') renderBalanceTab();
+        else if (activeTab === 'budgets') renderBudgets();
         else if (activeTab === 'reports') renderReports();
         else if (activeTab === 'badges') renderBadges();
         updateAlertBadgesUI();
@@ -1147,11 +1150,128 @@ var Budget = (function () {
             sidebarBal.className = 'sidebar-user-balance ' + (bal >= 0 ? 'text-pos' : 'text-neg');
         }
 
-        // Header bakiye hapı
+        // Sekme Bakiye Rozeti (İşlemlerim ve Bütçe Limitleri arasındaki Bakiye sekmesi)
+        var tabBal = document.getElementById('tab-balance-badge');
+        if (tabBal) {
+            tabBal.textContent = formatted;
+            tabBal.className = 'finance-balance-badge ' + (bal >= 0 ? 'text-pos' : 'text-neg');
+        }
+
+        // Header bakiye hapı (varsa)
         var headerBal = document.getElementById('header-user-balance');
         if (headerBal) {
             headerBal.textContent = formatted;
             headerBal.className = 'hub-amount ' + (bal >= 0 ? 'text-pos' : 'text-neg');
+        }
+
+        if (activeTab === 'balance') {
+            renderBalanceTab();
+        }
+    }
+
+    /* ==========================================================================
+       BAKİYE SEKME GÖRÜNÜMÜ (BALANCE TAB)
+       ========================================================================== */
+    function renderBalanceTab() {
+        var entries = (typeof Finance !== 'undefined' && Finance.getEntries) ? Finance.getEntries() : [];
+        var totalIncome = 0;
+        var totalExpense = 0;
+
+        entries.forEach(function (e) {
+            var amt = parseFloat(e.amount) || 0;
+            if (e.type === 'income') totalIncome += amt;
+            else if (e.type === 'expense') totalExpense += amt;
+        });
+
+        var netBalance = totalIncome - totalExpense;
+        var formattedNet = (netBalance >= 0 ? '+' : '-') + formatMoney(Math.abs(netBalance));
+        var formattedIncome = '+' + formatMoney(totalIncome);
+        var formattedExpense = '-' + formatMoney(totalExpense);
+
+        // Hero kartındaki bakiye tutarı
+        var heroAmount = document.getElementById('balance-view-amount');
+        if (heroAmount) {
+            heroAmount.textContent = formattedNet;
+            heroAmount.className = 'balance-card-amount ' + (netBalance >= 0 ? 'text-pos' : 'text-neg');
+        }
+
+        // Bakiye Durum Rozeti
+        var statusBadge = document.getElementById('balance-status-badge');
+        if (statusBadge) {
+            if (netBalance > 0) {
+                statusBadge.textContent = 'Pozitif Bakiye';
+                statusBadge.className = 'balance-status-pill status-pos';
+            } else if (netBalance < 0) {
+                statusBadge.textContent = 'Eksi Bakiye (Aşım)';
+                statusBadge.className = 'balance-status-pill status-neg';
+            } else {
+                statusBadge.textContent = 'Dengede (0 TL)';
+                statusBadge.className = 'balance-status-pill status-neutral';
+            }
+        }
+
+        // Toplam Gelir & Gider
+        var incEl = document.getElementById('balance-view-income');
+        if (incEl) incEl.textContent = formattedIncome;
+
+        var expEl = document.getElementById('balance-view-expense');
+        if (expEl) expEl.textContent = formattedExpense;
+
+        // İşlem sayısı
+        var countEl = document.getElementById('balance-trans-count');
+        if (countEl) countEl.textContent = entries.length + ' İşlem Kayıtlı';
+
+        // Gelir-Gider Dağılım Çubuğu
+        var totalTurnover = totalIncome + totalExpense;
+        var incPct = totalTurnover > 0 ? Math.round((totalIncome / totalTurnover) * 100) : 50;
+        var expPct = totalTurnover > 0 ? (100 - incPct) : 50;
+
+        var ratioText = document.getElementById('balance-ratio-percent');
+        if (ratioText) {
+            if (totalTurnover === 0) {
+                ratioText.textContent = 'Henüz işlem kaydı bulunmuyor';
+            } else {
+                ratioText.textContent = '%' + incPct + ' Gelir / %' + expPct + ' Gider';
+            }
+        }
+
+        var barInc = document.getElementById('balance-progress-income');
+        var barExp = document.getElementById('balance-progress-expense');
+        if (barInc && barExp) {
+            barInc.style.width = (totalTurnover === 0 ? 50 : incPct) + '%';
+            barExp.style.width = (totalTurnover === 0 ? 50 : expPct) + '%';
+        }
+
+        // Son 5 Bakiye Hareketi Listesi
+        var recentListEl = document.getElementById('balance-recent-list');
+        if (recentListEl) {
+            if (entries.length === 0) {
+                recentListEl.innerHTML = '<div class="balance-empty-state"><p>Henüz kayıtlı bir gelir veya gider işleminiz yok.</p></div>';
+            } else {
+                var sorted = entries.slice().sort(function(a, b) {
+                    return new Date(b.date || 0) - new Date(a.date || 0);
+                }).slice(0, 5);
+
+                var html = '<div class="balance-recent-table">';
+                sorted.forEach(function (e) {
+                    var isInc = e.type === 'income';
+                    var sign = isInc ? '+' : '-';
+                    var amtClass = isInc ? 'text-success' : 'text-danger';
+                    var categoryName = e.category || 'Genel';
+                    var desc = e.title || e.description || categoryName;
+                    var dateStr = e.date ? e.date.split('-').reverse().join('.') : '-';
+
+                    html += '<div class="balance-recent-row">';
+                    html += '  <div class="brr-col-info">';
+                    html += '    <span class="brr-title">' + escapeHtml(desc) + '</span>';
+                    html += '    <span class="brr-sub">' + escapeHtml(categoryName) + ' • ' + dateStr + '</span>';
+                    html += '  </div>';
+                    html += '  <div class="brr-col-amount ' + amtClass + '">' + sign + formatMoney(parseFloat(e.amount) || 0) + '</div>';
+                    html += '</div>';
+                });
+                html += '</div>';
+                recentListEl.innerHTML = html;
+            }
         }
     }
 
@@ -1219,6 +1339,7 @@ var Budget = (function () {
         // Bakiye & Profil
         getCurrentBalance: getCurrentBalance,
         updateUserBalanceDisplay: updateUserBalanceDisplay,
+        renderBalanceTab: renderBalanceTab,
         renderProfileBadges: renderProfileBadges,
         // Kategori filtreleme
         renderCategoryFilter: renderCategoryFilter,

@@ -681,13 +681,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- Güncel Bakiye Göstergesi -->
-                        <div id="header-user-balance-pill" class="header-user-balance-pill" title="Güncel Bakiye (Finanslarımı aç)" onclick="App.showSection('finance'); Budget.switchTab('transactions');">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                            <span class="hub-label">Bakiye:</span>
-                            <span id="header-user-balance" class="hub-amount">0,00 TL</span>
                         </div>
 
                         <button id="notif-floating-btn" class="notif-floating-btn" onclick="Notifications.togglePanel()"
@@ -1516,6 +1509,11 @@
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
                                     <span>İşlemlerim</span>
                                 </button>
+                                <button type="button" class="finance-tab-btn" data-tab="balance" onclick="Budget.switchTab('balance')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                    <span>Bakiye</span>
+                                    <span id="tab-balance-badge" class="finance-balance-badge">0,00 TL</span>
+                                </button>
                                 <button type="button" class="finance-tab-btn" data-tab="budgets" onclick="Budget.switchTab('budgets')">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                                     <span>Bütçe Limitleri</span>
@@ -1581,7 +1579,93 @@
                             </div>
                         </div>
 
-                        <!-- 2. SEKME: BÜTÇE LİMİTLERİ -->
+                        <!-- 2. SEKME: BAKİYE (GÜNCEL BAKİYE & FİNANSAL DURUM) -->
+                        <div id="finance-tab-balance" class="finance-tab-content" style="display:none;">
+                            <div class="budget-panel-header">
+                                <div>
+                                    <h3 class="budget-panel-title">Bakiye & Finansal Durum</h3>
+                                    <p class="budget-panel-subtitle">Güncel net bakiyenizi, toplam gelir ve gider dengesini buradan izleyebilirsiniz.</p>
+                                </div>
+                                <div class="budget-balance-actions">
+                                    <button type="button" class="btn btn-primary" onclick="Finance.openAddModal()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        <span>Yeni İşlem Ekle</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bakiye Hero Kartı & Özet Kartlar -->
+                            <div class="balance-hero-grid">
+                                <!-- Büyük Bakiye Kartı -->
+                                <div class="balance-main-card" id="balance-main-hero-card">
+                                    <div class="balance-main-top">
+                                        <div class="balance-main-meta">
+                                            <span class="balance-card-label">GÜNCEL NET BAKİYE</span>
+                                            <h2 id="balance-view-amount" class="balance-card-amount">0,00 TL</h2>
+                                        </div>
+                                        <div class="balance-main-badge-wrap">
+                                            <span id="balance-status-badge" class="balance-status-pill status-neutral">Dengede</span>
+                                        </div>
+                                    </div>
+                                    <div class="balance-main-footer">
+                                        <span id="balance-formula-label" class="balance-formula-text">Toplam Gelir − Toplam Gider = Net Kalan</span>
+                                        <span id="balance-trans-count" class="balance-count-text">0 İşlem Kayıtlı</span>
+                                    </div>
+                                </div>
+
+                                <!-- 2 Yan Kart: Gelir & Gider -->
+                                <div class="balance-side-cards">
+                                    <div class="balance-stat-card card-income">
+                                        <div class="bsc-icon">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                                        </div>
+                                        <div class="bsc-info">
+                                            <span class="bsc-label">Toplam Gelir</span>
+                                            <span id="balance-view-income" class="bsc-val text-success">+0,00 TL</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="balance-stat-card card-expense">
+                                        <div class="bsc-icon">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+                                        </div>
+                                        <div class="bsc-info">
+                                            <span class="bsc-label">Toplam Gider</span>
+                                            <span id="balance-view-expense" class="bsc-val text-danger">-0,00 TL</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gelir-Gider Dağılım Çubuğu & Durum Bilgisi -->
+                            <div class="balance-ratio-card">
+                                <div class="balance-ratio-header">
+                                    <span class="br-title">Gelir / Gider Dengesi</span>
+                                    <span id="balance-ratio-percent" class="br-percent">%0 Gelir / %0 Gider</span>
+                                </div>
+                                <div class="balance-progress-track">
+                                    <div id="balance-progress-income" class="balance-progress-bar income-bar" style="width: 50%;"></div>
+                                    <div id="balance-progress-expense" class="balance-progress-bar expense-bar" style="width: 50%;"></div>
+                                </div>
+                                <div class="balance-ratio-footer">
+                                    <span class="br-legend income-legend"><span class="dot"></span> Gelir</span>
+                                    <span class="br-legend expense-legend"><span class="dot"></span> Gider</span>
+                                </div>
+                            </div>
+
+                            <!-- Son Bakiye Hareketleri -->
+                            <div class="balance-history-card">
+                                <div class="balance-history-header">
+                                    <h4 class="bh-title">Son Bakiye Hareketleri</h4>
+                                    <button type="button" class="btn btn-sm btn-ghost" onclick="Budget.switchTab('transactions')">
+                                        Tüm İşlemleri Gör →
+                                    </button>
+                                </div>
+                                <div id="balance-recent-list" class="balance-recent-list"></div>
+                            </div>
+                        </div>
+
+                        <!-- 3. SEKME: BÜTÇE LİMİTLERİ -->
                         <div id="finance-tab-budgets" class="finance-tab-content" style="display:none;">
                             <div class="budget-panel-header">
                                 <div>

@@ -24614,6 +24614,29 @@ body.row-resize-active * {
     margin-left: 4px;
 }
 
+.finance-balance-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 7px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 4px;
+    background: rgba(100, 116, 139, 0.12);
+    color: var(--color-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.finance-balance-badge.text-pos {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.finance-balance-badge.text-neg {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
 @keyframes budgetPulse {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.15); opacity: 0.85; }
@@ -24828,6 +24851,302 @@ body.row-resize-active * {
 @keyframes dangerPulsing {
     0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
     50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+}
+
+/* 4.5. BAKİYE VE FİNANSAL DURUM PANELİ */
+.balance-hero-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+    .balance-hero-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.balance-main-card {
+    background: var(--color-bg-elevated, #ffffff);
+    border: 1px solid var(--color-border-subtle, #e2e8f0);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-main-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
+}
+
+.balance-main-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.balance-card-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--color-text-secondary);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.balance-card-amount {
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0;
+    color: var(--color-text);
+    letter-spacing: -0.5px;
+}
+
+.balance-card-amount.text-pos {
+    color: #10b981;
+}
+
+.balance-card-amount.text-neg {
+    color: #ef4444;
+}
+
+.balance-status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.balance-status-pill.status-pos {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.balance-status-pill.status-neg {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.balance-status-pill.status-neutral {
+    background: rgba(100, 116, 139, 0.12);
+    color: #64748b;
+    border: 1px solid rgba(100, 116, 139, 0.25);
+}
+
+.balance-main-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--color-border-subtle, #f1f5f9);
+    padding-top: 14px;
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.balance-side-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.balance-stat-card {
+    background: var(--color-bg-elevated, #ffffff);
+    border: 1px solid var(--color-border-subtle, #e2e8f0);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+    flex: 1;
+}
+
+.balance-stat-card .bsc-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.balance-stat-card.card-income .bsc-icon {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+}
+
+.balance-stat-card.card-expense .bsc-icon {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+.bsc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bsc-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.bsc-val {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.balance-ratio-card {
+    background: var(--color-bg-elevated, #ffffff);
+    border: 1px solid var(--color-border-subtle, #e2e8f0);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.balance-ratio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.balance-progress-track {
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--color-bg-subtle, #f1f5f9);
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.balance-progress-bar.income-bar {
+    background: #10b981;
+    transition: width 0.4s ease;
+}
+
+.balance-progress-bar.expense-bar {
+    background: #ef4444;
+    transition: width 0.4s ease;
+}
+
+.balance-ratio-footer {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.br-legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.br-legend .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.income-legend .dot { background: #10b981; }
+.expense-legend .dot { background: #ef4444; }
+
+.balance-history-card {
+    background: var(--color-bg-elevated, #ffffff);
+    border: 1px solid var(--color-border-subtle, #e2e8f0);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.balance-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.bh-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-text);
+}
+
+.balance-recent-table {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.balance-recent-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--color-bg-subtle, #f8fafc);
+    border: 1px solid var(--color-border-subtle, #f1f5f9);
+    transition: background 0.15s ease;
+}
+
+.balance-recent-row:hover {
+    background: var(--color-bg-hover, #f1f5f9);
+}
+
+.brr-col-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.brr-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.brr-sub {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.brr-col-amount {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.balance-empty-state {
+    padding: 24px;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 13px;
 }
 
 /* 5. AYLIK RAPOR VE DAĞILIM */
