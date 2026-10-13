@@ -336,6 +336,7 @@ var App = (function () {
                         sidebar.classList.remove('collapsed');
                     }
                 }
+            }
 
             /* Sayfa başlığını güncelle */
             var headerTitles = {
@@ -3317,7 +3318,6 @@ var App = (function () {
         closeLogoutModal: closeLogoutModal,
         confirmLogout: confirmLogout,
         toggleSidebar: toggleSidebar,
-        switchSidebarTab: switchSidebarTab,
         updateSidebarBadges: updateSidebarBadges,
         showNavContextMenu: showNavContextMenu,
         closeNavContextMenu: closeNavContextMenu,
