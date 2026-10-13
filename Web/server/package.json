@@ -1,0 +1,19 @@
+{
+  "name": "noteday-chat-server",
+  "version": "1.0.0",
+  "description": "NoteDay Real-time Chat Server — Socket.io + Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.4",
+    "cors": "^2.8.5",
+    "sql.js": "^1.10.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.4.1"
+  }
+}
