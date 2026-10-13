@@ -51,12 +51,16 @@ var Settings = (function () {
     // ===== Kullanıcı Dropdown Menü =====
     var _dropdownMoved = false;
 
-    var activeTriggerId = 'sidebar-user-trigger';
-    function toggleUserMenu(triggerId) {
+    var activeTriggerId = 'header-user-avatar';
+    function toggleUserMenu(triggerId, e) {
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        }
+
         var dropdown = document.getElementById('user-dropdown');
         if (!dropdown) return;
 
-        var targetTriggerId = triggerId || 'sidebar-user-trigger';
+        var targetTriggerId = triggerId || 'header-user-avatar';
 
         // İlk seferde dropdown'ı body'ye taşı (sidebar layout'tan ayır)
         if (!_dropdownMoved) {
@@ -64,10 +68,10 @@ var Settings = (function () {
             _dropdownMoved = true;
         }
 
-        var isOpen = dropdown.classList.contains('open');
+        var isOpen = dropdown.classList.contains('open') && dropdown.style.display !== 'none';
         if (isOpen) {
             if (activeTriggerId === targetTriggerId) {
-                dropdown.classList.remove('open');
+                closeUserMenu();
                 return;
             }
         }
@@ -111,20 +115,25 @@ var Settings = (function () {
         var trigger = document.getElementById(activeTriggerId);
         if (trigger) {
             var rect = trigger.getBoundingClientRect();
-            // Aşağı doğru aç
-            dropdown.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+            dropdown.style.top = (rect.bottom + window.scrollY + 6) + 'px';
             if (activeTriggerId === 'header-user-avatar') {
-                dropdown.style.left = (rect.right - 240) + 'px'; // 240px is the width of user-dropdown or similar
+                dropdown.style.left = 'auto';
+                dropdown.style.right = Math.max(12, window.innerWidth - rect.right) + 'px';
             } else {
-                dropdown.style.left = rect.left + 'px';
+                dropdown.style.left = Math.max(12, rect.left) + 'px';
+                dropdown.style.right = 'auto';
             }
         }
+        dropdown.style.display = 'flex';
         dropdown.classList.add('open');
     }
 
     function closeUserMenu() {
         var dropdown = document.getElementById('user-dropdown');
-        if (dropdown) dropdown.classList.remove('open');
+        if (dropdown) {
+            dropdown.classList.remove('open');
+            dropdown.style.display = 'none';
+        }
     }
 
     // Sayfa herhangi bir yerine tıklanınca menüyü kapat
@@ -132,7 +141,7 @@ var Settings = (function () {
         var trigger1 = document.getElementById('sidebar-user-trigger');
         var trigger2 = document.getElementById('header-user-avatar');
         var dropdown = document.getElementById('user-dropdown');
-        if (!dropdown) return;
+        if (!dropdown || !dropdown.classList.contains('open')) return;
         
         var clickedTrigger = (trigger1 && trigger1.contains(e.target)) || (trigger2 && trigger2.contains(e.target));
         if (!clickedTrigger && !dropdown.contains(e.target)) {

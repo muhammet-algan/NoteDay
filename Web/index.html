@@ -316,7 +316,7 @@
                 </div>
 
                 <!-- Kullanıcı Dropdown Menüsü (Gerekli olduğunda açılır) -->
-                <div id="user-dropdown" class="user-dropdown" style="display:none;">
+                <div id="user-dropdown" class="user-dropdown">
                     <!-- E-posta satırı -->
                     <div class="udm-email-row">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -695,7 +695,7 @@
                         </button>
 
                         <div class="notum-more-menu-wrapper" style="align-items: center; gap: 8px;">
-                            <div id="header-user-avatar" class="header-user-avatar" onclick="Settings.toggleUserMenu('header-user-avatar')" title="Profil">U</div>
+                            <div id="header-user-avatar" class="header-user-avatar" onclick="Settings.toggleUserMenu('header-user-avatar', event)" title="Profil">U</div>
                             <button id="notum-style-more-btn" class="notum-style-more-btn" onclick="SayfaMenusu.toggle(event)" title="Seçenekler">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="1.5"/>
