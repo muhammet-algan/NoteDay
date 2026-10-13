@@ -845,6 +845,7 @@ input[type="date"].form-control {
     width: 32px;
     height: 32px;
     padding: 0;
+    margin-right: 8px;
     border-radius: 6px;
     border: none !important;
     background: transparent !important;
