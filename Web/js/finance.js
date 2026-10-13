@@ -275,12 +275,22 @@ var Finance = (function () {
         var incomeActive = entry.type === 'income' ? ' active' : '';
         var expenseActive = entry.type === 'expense' ? ' active' : '';
 
+        var entryDateObj = entry.date ? new Date(entry.date) : new Date();
+        if (isNaN(entryDateObj.getTime())) entryDateObj = new Date();
+        var entryDateStr = entryDateObj.getFullYear() + '-' +
+            String(entryDateObj.getMonth() + 1).padStart(2, '0') + '-' +
+            String(entryDateObj.getDate()).padStart(2, '0');
+
         var html = '<div class="modal-overlay" onclick="Finance.closeModal()">' +
             '<div class="modal-content finance-edit-modal" onclick="event.stopPropagation()">' +
             '<button class="modal-close" onclick="Finance.closeModal()">&times;</button>' +
             '<h3 class="finance-edit-modal-title">İşlemi Düzenle</h3>' +
             '<form id="finance-edit-form" onsubmit="Finance.saveEditModal(event)">' +
             '<input type="hidden" id="finance-edit-id" value="' + id + '">' +
+            '<div class="form-group">' +
+            '<label>Tarih</label>' +
+            '<input type="date" id="finance-edit-date" class="form-control" value="' + entryDateStr + '" required>' +
+            '</div>' +
             '<div class="form-group">' +
             '<label>Tür</label>' +
             '<input type="hidden" id="finance-edit-type" value="' + entry.type + '">' +
@@ -335,6 +345,8 @@ var Finance = (function () {
         e.preventDefault();
 
         var id = parseInt(document.getElementById('finance-edit-id').value, 10);
+        var dateInput = document.getElementById('finance-edit-date');
+        var dateVal = dateInput ? dateInput.value : '';
         var type = document.getElementById('finance-edit-type').value;
         var amount = parseFloat(document.getElementById('finance-edit-amount').value);
         var category = document.getElementById('finance-edit-category').value;
@@ -349,7 +361,21 @@ var Finance = (function () {
             entry.amount = amount;
             entry.category = category;
             entry.description = desc;
+            if (dateVal) {
+                var origDate = entry.date ? new Date(entry.date) : new Date();
+                var timePart = !isNaN(origDate.getTime())
+                    ? String(origDate.getHours()).padStart(2, '0') + ':' +
+                      String(origDate.getMinutes()).padStart(2, '0') + ':' +
+                      String(origDate.getSeconds()).padStart(2, '0')
+                    : '12:00:00';
+                var parsed = new Date(dateVal + 'T' + timePart);
+                entry.date = !isNaN(parsed.getTime()) ? parsed.toISOString() : new Date(dateVal).toISOString();
+            }
         }
+
+        entries.sort(function (a, b) {
+            return new Date(b.date) - new Date(a.date);
+        });
 
         saveEntries(entries);
         closeModal();
@@ -1259,11 +1285,20 @@ var Finance = (function () {
     /* ---- YENİ KAYIT EKLEME MODALI (Header Butonu İçin) ---- */
 
     function openAddModal() {
+        var today = new Date();
+        var todayStr = today.getFullYear() + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            String(today.getDate()).padStart(2, '0');
+
         var html = '<div class="modal-overlay" onclick="Finance.closeModal()">' +
             '<div class="modal-content finance-edit-modal" onclick="event.stopPropagation()">' +
             '<button class="modal-close" onclick="Finance.closeModal()">&times;</button>' +
             '<h3 class="finance-edit-modal-title">Yeni Kayıt Oluştur</h3>' +
             '<form id="finance-add-form" onsubmit="Finance.saveAddModal(event)">' +
+            '<div class="form-group">' +
+            '<label>Tarih</label>' +
+            '<input type="date" id="finance-add-date" class="form-control" value="' + todayStr + '" required>' +
+            '</div>' +
             '<div class="form-group">' +
             '<label>Tür</label>' +
             '<input type="hidden" id="finance-add-type" value="expense">' +
@@ -1271,7 +1306,7 @@ var Finance = (function () {
             '<div class="styled-select-trigger" onclick="toggleStyledSelect(\'finance-add-type-select\')">' +
             '<span class="trigger-label" id="finance-add-type-label">Gider</span>' +
             '<svg class="trigger-chevron" width="14" height="14" viewBox="0 0 14 14">' +
-            '<path fill="currentColor" d="M7 9.5L2.5 5 3.56 3.94 7 7.38 10.44 3.94 11.5 5z"/>' +
+            '<path fill="currentColor" d="M7 9.5L2.5 5 3.56 3.94 7 7.38 10.44 3.94 11.5z"/>' +
             '</svg>' +
             '</div>' +
             '<div class="styled-select-dropdown">' +
@@ -1323,12 +1358,26 @@ var Finance = (function () {
     function saveAddModal(e) {
         e.preventDefault();
 
+        var dateInput = document.getElementById('finance-add-date');
+        var dateVal = dateInput ? dateInput.value : '';
         var type = document.getElementById('finance-add-type').value;
         var amount = parseFloat(document.getElementById('finance-add-amount').value);
         var category = document.getElementById('finance-add-category').value;
         var desc = document.getElementById('finance-add-desc').value.trim();
 
         if (!type || isNaN(amount) || amount <= 0) return;
+
+        var entryDate;
+        if (dateVal) {
+            var now = new Date();
+            var timePart = String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0') + ':' +
+                String(now.getSeconds()).padStart(2, '0');
+            var parsed = new Date(dateVal + 'T' + timePart);
+            entryDate = !isNaN(parsed.getTime()) ? parsed.toISOString() : new Date(dateVal).toISOString();
+        } else {
+            entryDate = new Date().toISOString();
+        }
 
         var entries = getEntries();
         entries.unshift({
@@ -1337,7 +1386,11 @@ var Finance = (function () {
             amount: amount,
             category: category,
             description: desc,
-            date: new Date().toISOString()
+            date: entryDate
+        });
+
+        entries.sort(function (a, b) {
+            return new Date(b.date) - new Date(a.date);
         });
 
         saveEntries(entries);

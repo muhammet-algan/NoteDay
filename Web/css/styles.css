@@ -282,6 +282,15 @@ select.form-control {
     padding-right: 36px;
 }
 
+input[type="date"].form-control {
+    font-family: inherit;
+    color: var(--color-text);
+}
+
+[data-theme="dark"] input[type="date"].form-control {
+    color-scheme: dark;
+}
+
 /* --- Ã–ZEL STYLED SELECT (Trigger + Dropdown) --- */
 .styled-select {
     position: relative;
