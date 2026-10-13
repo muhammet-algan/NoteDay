@@ -81,14 +81,15 @@ var Finance = (function () {
             if (submitBtn) submitBtn.textContent = 'Ekle';
         } else {
             /* Yeni kayıt oluştur ve listenin başına ekle */
-            entries.unshift({
+            var newEntry = {
                 id: Date.now(),
                 type: type,
                 amount: amount,
                 category: category,
                 description: desc,
                 date: new Date().toISOString()
-            });
+            };
+            entries.unshift(newEntry);
         }
 
         /* Kaydet ve formu sıfırla */
@@ -97,6 +98,10 @@ var Finance = (function () {
         categoryInput.value = '';
         descInput.value = '';
         render();
+
+        if (typeof Budget !== 'undefined' && Budget.onTransactionChanged) {
+            Budget.onTransactionChanged(newEntry || entry);
+        }
     }
 
     /* Kaydı düzenleme - Modal açarak düzenleme formu göster */
@@ -166,6 +171,10 @@ var Finance = (function () {
         saveEntries(entries);
         closeModal();
         render();
+
+        if (typeof Budget !== 'undefined' && Budget.onTransactionChanged) {
+            Budget.onTransactionChanged();
+        }
     }
 
     /* Tarih filtresini değiştirme (bu ay, geçen ay, son 3 ay, yıllık, özel) */
@@ -249,15 +258,21 @@ var Finance = (function () {
         return { start: start, end: end };
     }
 
-    /* Kayıtları tarih aralığına göre filtreleme */
+    /* Kayıtları tarih aralığına ve seçili kategoriye göre filtreleme */
     function filterEntries(entries) {
         var range = getDateRange();
-        if (!range.start && !range.end) return entries;
+        var catFilter = (typeof Budget !== 'undefined' && Budget.getCurrentCategoryFilter) ? Budget.getCurrentCategoryFilter() : '';
 
         return entries.filter(function (entry) {
-            var entryDate = new Date(entry.date);
-            if (range.start && entryDate < range.start) return false;
-            if (range.end && entryDate > range.end) return false;
+            if (range.start || range.end) {
+                var entryDate = new Date(entry.date);
+                if (range.start && entryDate < range.start) return false;
+                if (range.end && entryDate > range.end) return false;
+            }
+            if (catFilter) {
+                var entryCat = (entry.category || '').trim().toLowerCase();
+                if (entryCat !== catFilter.trim().toLowerCase()) return false;
+            }
             return true;
         });
     }
@@ -391,6 +406,10 @@ var Finance = (function () {
         saveEntries(entries);
         closeModal();
         render();
+
+        if (typeof Budget !== 'undefined' && Budget.onTransactionChanged) {
+            Budget.onTransactionChanged(entry);
+        }
     }
 
     /* Tutarı Türk Lirası formatında gösterme (virgül ile) */
@@ -448,6 +467,10 @@ var Finance = (function () {
 
         var allEntries = getEntries();
         var entries = filterEntries(allEntries);
+
+        if (typeof Budget !== 'undefined' && Budget.renderCategoryFilter) {
+            Budget.renderCategoryFilter();
+        }
 
         /* Kayıt listesini oluştur */
         var listBody = document.getElementById('finance-list-body');
@@ -1402,14 +1425,15 @@ var Finance = (function () {
         }
 
         var entries = getEntries();
-        entries.unshift({
+        var newEntry = {
             id: Date.now(),
             type: type,
             amount: amount,
             category: category,
             description: desc,
             date: entryDate
-        });
+        };
+        entries.unshift(newEntry);
 
         entries.sort(function (a, b) {
             return new Date(b.date) - new Date(a.date);
@@ -1418,6 +1442,11 @@ var Finance = (function () {
         saveEntries(entries);
         closeModal();
         render();
+
+        if (typeof Budget !== 'undefined' && Budget.onTransactionChanged) {
+            Budget.onTransactionChanged(newEntry);
+        }
+
         if (typeof Toast !== 'undefined' && Toast.success) {
             Toast.success('Kayıt oluşturuldu!');
         }

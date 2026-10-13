@@ -1501,49 +1501,173 @@
 
 
                     <!-- GELİR/GİDER TAKİBİ BÖLÜMÜ -->
+                    <!-- GELİR/GİDER VE BÜTÇE TAKİBİ BÖLÜMÜ -->
                     <section id="finance-section" class="section-panel">
-                        <div class="finance-layout">
-
-                            <!-- SOL: İişlem Listesi -->
-                            <div class="finance-main">
-                                <div class="finance-list">
-                                    <div class="finance-list-header">
-                                        <span>Açıklama</span>
-                                        <span>Kategori</span>
-                                        <span>Tutar</span>
-                                        <span>Tarih</span>
-                                    </div>
-                                    <div id="finance-list-body" class="finance-list-body"></div>
-                                </div>
+                        <!-- Finans Üst Sekme Çubuğu -->
+                        <div class="finance-nav-tabs-wrapper">
+                            <div class="finance-nav-tabs" id="finance-tabs">
+                                <button type="button" class="finance-tab-btn active" data-tab="transactions" onclick="Budget.switchTab('transactions')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                                    <span>İşlemlerim</span>
+                                </button>
+                                <button type="button" class="finance-tab-btn" data-tab="budgets" onclick="Budget.switchTab('budgets')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                    <span>Bütçe Limitleri</span>
+                                    <span id="budget-alert-badge" class="budget-alert-dot" style="display:none;" title="Limit Uyarısı">!</span>
+                                </button>
+                                <button type="button" class="finance-tab-btn" data-tab="reports" onclick="Budget.switchTab('reports')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                    <span>Aylık Rapor & Dağılım</span>
+                                </button>
+                                <button type="button" class="finance-tab-btn" data-tab="goals" onclick="Budget.switchTab('goals')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                                    <span>Tasarruf Hedefleri</span>
+                                </button>
+                                <button type="button" class="finance-tab-btn" data-tab="badges" onclick="Budget.switchTab('badges')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                    <span>Rozetler</span>
+                                    <span id="badge-unlocked-count" class="budget-count-pill" style="display:none;">0/3</span>
+                                </button>
                             </div>
-
-                            <!-- SAĞ: Finans Takvimi -->
-                            <div class="finance-sidebar">
-                                <div class="calendar-widget">
-                                    <div class="calendar-header">
-                                        <button class="calendar-nav-btn" onclick="FinanceCalendar.prevMonth()">
-                                            <svg width="18" height="18" fill="none" stroke="currentColor"
-                                                stroke-width="2" viewBox="0 0 24 24">
-                                                <path d="M15 18l-6-6 6-6" />
-                                            </svg>
-                                        </button>
-                                        <h3 id="calendar-month-year" class="calendar-title"></h3>
-                                        <button class="calendar-nav-btn" onclick="FinanceCalendar.nextMonth()">
-                                            <svg width="18" height="18" fill="none" stroke="currentColor"
-                                                stroke-width="2" viewBox="0 0 24 24">
-                                                <path d="M9 18l6-6-6-6" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <div class="calendar-weekdays">
-                                        <span>Pzt</span><span>Sal</span><span>çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span>
-                                    </div>
-                                    <div id="calendar-days" class="calendar-days"></div>
-                                    <div id="calendar-day-summary" class="calendar-day-summary"></div>
-                                </div>
-                            </div>
-
                         </div>
+
+                        <!-- 1. SEKME: İŞLEMLERİM (MEVCUT GÖRÜNÜM) -->
+                        <div id="finance-tab-transactions" class="finance-tab-content active">
+                            <!-- Kategori Filtreleme Çubuğu -->
+                            <div id="finance-category-filter-bar" class="finance-filter-container"></div>
+
+                            <div class="finance-layout">
+                                <!-- SOL: İşlem Listesi -->
+                                <div class="finance-main">
+                                    <div class="finance-list">
+                                        <div class="finance-list-header">
+                                            <span>Açıklama</span>
+                                            <span>Kategori</span>
+                                            <span>Tutar</span>
+                                            <span>Tarih</span>
+                                        </div>
+                                        <div id="finance-list-body" class="finance-list-body"></div>
+                                    </div>
+                                </div>
+
+                                <!-- SAĞ: Finans Takvimi -->
+                                <div class="finance-sidebar">
+                                    <div class="calendar-widget">
+                                        <div class="calendar-header">
+                                            <button class="calendar-nav-btn" onclick="FinanceCalendar.prevMonth()">
+                                                <svg width="18" height="18" fill="none" stroke="currentColor"
+                                                    stroke-width="2" viewBox="0 0 24 24">
+                                                    <path d="M15 18l-6-6 6-6" />
+                                                </svg>
+                                            </button>
+                                            <h3 id="calendar-month-year" class="calendar-title"></h3>
+                                            <button class="calendar-nav-btn" onclick="FinanceCalendar.nextMonth()">
+                                                <svg width="18" height="18" fill="none" stroke="currentColor"
+                                                    stroke-width="2" viewBox="0 0 24 24">
+                                                    <path d="M9 18l6-6-6-6" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="calendar-weekdays">
+                                            <span>Pzt</span><span>Sal</span><span>çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span>
+                                        </div>
+                                        <div id="calendar-days" class="calendar-days"></div>
+                                        <div id="calendar-day-summary" class="calendar-day-summary"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. SEKME: BÜTÇE LİMİTLERİ -->
+                        <div id="finance-tab-budgets" class="finance-tab-content" style="display:none;">
+                            <div class="budget-panel-header">
+                                <div>
+                                    <h3 class="budget-panel-title" id="budget-limits-month-label">Aylık Bütçe Limitleri</h3>
+                                    <p class="budget-panel-subtitle">Her kategori için aylık harcama limiti belirleyin. %80'de sarı ikaz, %100 ve üzerinde kırmızı uyarı alırsınız.</p>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="Budget.openLimitModal()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>Yeni Limit Ekle</span>
+                                </button>
+                            </div>
+                            <div id="budget-limits-list"></div>
+                        </div>
+
+                        <!-- 3. SEKME: AYLIK RAPOR & DAĞILIM -->
+                        <div id="finance-tab-reports" class="finance-tab-content" style="display:none;">
+                            <div class="budget-panel-header budget-report-header">
+                                <div class="budget-report-month-nav">
+                                    <button type="button" class="calendar-nav-btn" onclick="Budget.prevReportMonth()">
+                                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                                    </button>
+                                    <h3 class="budget-panel-title" id="budget-report-month-title">Ekim 2026</h3>
+                                    <button type="button" class="calendar-nav-btn" onclick="Budget.nextReportMonth()">
+                                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="Budget.setReportMonthToCurrent()" style="margin-left: 10px;">Bu Ay</button>
+                                </div>
+                            </div>
+
+                            <!-- 3 Özet Kartı: Toplam Gelir, Toplam Gider, Kalan Bakiye -->
+                            <div class="report-summary-cards">
+                                <div class="report-summary-card card-income">
+                                    <div class="rsc-icon">📈</div>
+                                    <div class="rsc-content">
+                                        <span class="rsc-label">Toplam Gelir</span>
+                                        <span id="report-total-income" class="rsc-value text-success">+0,00 TL</span>
+                                    </div>
+                                </div>
+                                <div class="report-summary-card card-expense">
+                                    <div class="rsc-icon">📉</div>
+                                    <div class="rsc-content">
+                                        <span class="rsc-label">Toplam Gider</span>
+                                        <span id="report-total-expense" class="rsc-value text-danger">-0,00 TL</span>
+                                    </div>
+                                </div>
+                                <div class="report-summary-card card-balance">
+                                    <div class="rsc-icon">💳</div>
+                                    <div class="rsc-content">
+                                        <span class="rsc-label">Net Kalan Bakiye</span>
+                                        <span id="report-net-balance" class="rsc-value">0,00 TL</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Harcamaların Kategorilere Göre Dağılımı Tablosu ve Grafiği -->
+                            <div class="report-breakdown-card">
+                                <h4 class="report-breakdown-title">Kategori Bazlı Harcama Dağılımı</h4>
+                                <div id="budget-category-breakdown"></div>
+                            </div>
+                        </div>
+
+                        <!-- 4. SEKME: TASARRUF HEDEFLERİ -->
+                        <div id="finance-tab-goals" class="finance-tab-content" style="display:none;">
+                            <div class="budget-panel-header">
+                                <div>
+                                    <h3 class="budget-panel-title">Tasarruf Hedefleri</h3>
+                                    <p class="budget-panel-subtitle">Birikim veya eşya hedefleri belirleyin, para ayırın ve ilerleme çubuğuyla takip edin.</p>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="Budget.openAddGoalModal()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>Yeni Hedef Oluştur</span>
+                                </button>
+                            </div>
+                            <div id="budget-goals-list"></div>
+                        </div>
+
+                        <!-- 5. SEKME: ROZETLER (OYUNLAŞTIRMA) -->
+                        <div id="finance-tab-badges" class="finance-tab-content" style="display:none;">
+                            <div class="budget-panel-header">
+                                <div>
+                                    <h3 class="budget-panel-title">Başarı Rozetleri</h3>
+                                    <p class="budget-panel-subtitle">Finansal disiplin ve birikim alışkanlığı kazandıkça özel rozetlerin kilidini açın.</p>
+                                </div>
+                            </div>
+                            <div id="budget-badges-list"></div>
+                        </div>
+
+                        <!-- Modal Konteyneri -->
+                        <div id="budget-modal-container"></div>
                     </section>
 
                     <!-- HAREKETLERİM OVERLAY -->
@@ -3142,6 +3266,7 @@
     <script src="js/finance.js?v=99"></script>
     <script src="js/financeCalendar.js?v=99"></script>
     <script src="js/financeCalendarPicker.js?v=99"></script>
+    <script src="js/budget.js?v=1"></script>
     <script src="js/notes.js?v=103"></script>
     <script src="js/board.js?v=99"></script>
 

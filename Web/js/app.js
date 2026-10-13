@@ -531,6 +531,9 @@ var App = (function () {
             case 'finance':
                 Finance.render();            // Gelir/gider kayıtlarını göster
                 FinanceCalendar.render();    // Finans takvimini çiz
+                if (typeof Budget !== 'undefined' && Budget.init) {
+                    Budget.init();
+                }
                 break;
             case 'notes':
                 Notes.render();
